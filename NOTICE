@@ -1,0 +1,24 @@
+ComfyUI-ReCaVSR is licensed under the GNU General Public License v3.0 (LICENSE), like ComfyUI, whose code it imports.
+
+It includes code adapted from ReCaVSR (https://github.com/kopperx/ReCaVSR) by Xijun Wang, Xin Li, Suhang Yao, Zirui
+Lang, Bingchen Li and Zhibo Chen, University of Science and Technology of China, licensed under the Apache License,
+Version 2.0 (LICENSE-APACHE):
+
+- recavsr/attention.py: ReCaVSR's windowed-attention Triton kernel (kernels/local_attention.py), forward only, with
+  retuned tiles and a PyTorch fallback added.
+- recavsr/flashdecoder.py: the LR-conditioned FlashDecoder (models/flashdecoder/), forward only, on ComfyUI's ops.
+- recavsr/cache.py: the routed KV history and the rolling temporal RoPE (runtime/cache.py, runtime/rope.py), with an
+  option to keep the history in RAM added.
+- recavsr/dit.py, recavsr/session.py: reimplemented on ComfyUI's ops after the reference runtime's streaming step,
+  block schedule, LQ preparation and colour corrections, keeping the released module names so the weights load as
+  they are.
+
+The transformer is Wan2.2 TI2V-5B (Alibaba Wan team, Apache License 2.0) with ReCaVSR's adapters merged in.
+
+The model weights are not part of this repository:
+
+- the transformer, prompt and FlashDecoder: https://huggingface.co/kopper/ReCaVSR, which states no licence
+- the int8 ConvRot transformer: https://huggingface.co/PedroMarinhoDev/ReCaVSR-ComfyUI, converted from the above
+
+The clips in assets/ are inputs 021 and 009 of ReCaVSR's real-world demo set (https://huggingface.co/anonyaa/ReCaVSR),
+upscaled with these nodes.

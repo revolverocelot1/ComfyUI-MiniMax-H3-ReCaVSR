@@ -1,0 +1,2340 @@
+{
+  "id": "minimax_h3_r2v_recavsr_pipeline",
+  "revision": 0,
+  "last_node_id": 181,
+  "last_link_id": 500,
+  "nodes": [
+    {
+      "id": 92,
+      "type": "SaveVideo",
+      "pos": [
+        1580,
+        4820
+      ],
+      "size": [
+        380,
+        592
+      ],
+      "flags": {},
+      "order": 31,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "link": 260
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "links": [
+            376
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "SaveVideo"
+      },
+      "widgets_values": [
+        "video/MiniMax_H3_R2V_768p_Draft",
+        "auto",
+        "auto"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "video/MiniMax_H3",
+        "format": "auto",
+        "format.codec": "auto",
+        "codec": "auto"
+      },
+      "title": "Save Video (Stage 1: R2V 768P Draft Video)"
+    },
+    {
+      "id": 116,
+      "type": "MarkdownNote",
+      "pos": [
+        -2400,
+        4750
+      ],
+      "size": [
+        500,
+        750
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "MiniMax H3 — Ref2VA + Semantic Bridge + LoRA",
+      "properties": {},
+      "widgets_values": [
+        "# MiniMax H3 Reference-to-Video + Semantic Bridge + Dual LoRA\n\n**All wires are fully pre-connected! Zero manual wiring needed.**\n\n### 1. Semantic Bridge Adapter (Node #145)\n- **Adapter**: `MiniMaxH3_SemanticBridge_v1.safetensors`\n- **Alpha**: `0.08` (conservative recommended value for Ref2VA)\n- **Magnitude Match**: `per_token`\n- *Author Note*: Semantic Bridge was distilled on standard text conditioning. In Ref2VA, keep alpha between `0.05 - 0.10` to enhance prompt grounding without degrading reference facial/lip articulation.\n\n### 2. UNET Loader (Diffusion Model)\n- **Singularity**: `Minimax-h3_Singularity_ref2va_Pruned_v1.3_int8.safetensors`\n- **Stock Ref2VA**: `minimax_h3_ref2va_pruned_int8_convrot.safetensors`\n\n### 3. Dual LoRA Chain\n- **LoRA 1**: Character / Style / NSFW (Megan Fox, Sydney Sweeney, etc.)\n- **LoRA 2**: Turbo 4-Step (`1.0` strength for fast 4-step; `0.0` for 20-step native)\n\n### 4. Reference Media Tags in Prompt\n- Use `<Picture 1>` to reference Reference Image 0\n- Use `<Picture 2>` to reference Reference Image 1\n- Use `<Video 1>` to reference Reference Video Input\n"
+      ],
+      "widgets_values_named": {
+        "text": "# MiniMax H3 Reference-to-Video + Semantic Bridge + Dual LoRA\n\n**All wires are fully pre-connected! Zero manual wiring needed.**\n\n### 1. Semantic Bridge Adapter (Node #145)\n- **Adapter**: `MiniMaxH3_SemanticBridge_v1.safetensors`\n- **Alpha**: `0.08` (conservative recommended value for Ref2VA)\n- **Magnitude Match**: `per_token`\n- *Author Note*: Semantic Bridge was distilled on standard text conditioning. In Ref2VA, keep alpha between `0.05 - 0.10` to enhance prompt grounding without degrading reference facial/lip articulation.\n\n### 2. UNET Loader (Diffusion Model)\n- **Singularity**: `Minimax-h3_Singularity_ref2va_Pruned_v1.3_int8.safetensors`\n- **Stock Ref2VA**: `minimax_h3_ref2va_pruned_int8_convrot.safetensors`\n\n### 3. Dual LoRA Chain\n- **LoRA 1**: Character / Style / NSFW (Megan Fox, Sydney Sweeney, etc.)\n- **LoRA 2**: Turbo 4-Step (`1.0` strength for fast 4-step; `0.0` for 20-step native)\n\n### 4. Reference Media Tags in Prompt\n- Use `<Picture 1>` to reference Reference Image 0\n- Use `<Picture 2>` to reference Reference Image 1\n- Use `<Video 1>` to reference Reference Video Input\n"
+      },
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 117,
+      "type": "MarkdownNote",
+      "pos": [
+        -2722.1020203094477,
+        5548.225360412597
+      ],
+      "size": [
+        500,
+        470
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Note: Model Links",
+      "properties": {},
+      "widgets_values": [
+        "minimax_h3_video_vae_fp16.safetensors"
+      ],
+      "widgets_values_named": {
+        "text": "## Model Links\n[🤗 Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3)\n\n**vae**\n\n- [minimax_h3_video_vae_fp16.safetensors](https://huggingface.co/speach1sdef178/MiniMax-H3/resolve/main/minimax_h3_video_vae_fp16.safetensors)\n- [minimax_h3_video_vae_fp16.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_video_vae_fp16.safetensors)\n- [minimax_h3_audio_vae_fp32.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_audio_vae_fp32.safetensors)\n\n**diffusion_models**\n\n- [minimax_h3_ref2va_pruned_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_ref2va_pruned_int8_convrot.safetensors)\n\n**text_encoders**\n\n- [qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors)\n\n\n## Model Storage Location\n\n```\n📂 ComfyUI/\n├── 📂 models/\n│   ├── 📂 vae/\n│   │   ├── minimax_h3_video_vae_fp16.safetensors\n│   │   ├── minimax_h3_video_vae_fp16.safetensors\n│   │   └── minimax_h3_audio_vae_fp32.safetensors\n│   ├── 📂 diffusion_models/\n│   │   └── minimax_h3_ref2va_pruned_int8_convrot.safetensors\n│   └── 📂 text_encoders/\n│       └── qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors\n```\n\n## Report Issue\n\nNote: Please update ComfyUI first ([guide](https://docs.comfy.org/installation/update_comfyui)) and prepare required models. Desktop/Cloud updates follow stable releases, so some nightly-supported models may not be available yet.\n\n- Cannot run / runtime errors: [ComfyUI/issues](https://github.com/comfyanonymous/ComfyUI/issues)\n- UI / frontend issues: [ComfyUI_frontend/issues](https://github.com/Comfy-Org/ComfyUI_frontend/issues)\n- Workflow issues: [workflow_templates/issues](https://github.com/Comfy-Org/workflow_templates/issues)\n"
+      },
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 119,
+      "type": "VAELoader",
+      "pos": [
+        -1850,
+        5050
+      ],
+      "size": [
+        440,
+        75
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            251,
+            273
+          ]
+        }
+      ],
+      "title": "VAE Loader (Stage 1: MiniMax H3 Video VAE FP16)",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "VAELoader",
+        "models": [
+          {
+            "name": "minimax_h3_video_vae_fp16.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_video_vae_fp16.safetensors",
+            "directory": "vae"
+          }
+        ]
+      },
+      "widgets_values": [
+        "minimax_h3_video_vae_fp16.safetensors"
+      ],
+      "widgets_values_named": {
+        "vae_name": "minimax_h3_video_vae_fp16.safetensors"
+      }
+    },
+    {
+      "id": 120,
+      "type": "VAELoader",
+      "pos": [
+        -1850,
+        5175
+      ],
+      "size": [
+        440,
+        75
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            250,
+            274
+          ]
+        }
+      ],
+      "title": "VAE Loader (Audio)",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "VAELoader",
+        "models": [
+          {
+            "name": "minimax_h3_audio_vae_fp32.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_audio_vae_fp32.safetensors",
+            "directory": "vae"
+          }
+        ]
+      },
+      "widgets_values": [
+        "minimax_h3_audio_vae_fp32.safetensors"
+      ],
+      "widgets_values_named": {
+        "vae_name": "minimax_h3_audio_vae_fp32.safetensors"
+      }
+    },
+    {
+      "id": 121,
+      "type": "VAEDecodeAudio",
+      "pos": [
+        990,
+        4920
+      ],
+      "size": [
+        230,
+        65
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 29,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 281
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 250
+        }
+      ],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": []
+        }
+      ],
+      "title": "VAE Decode (Audio)",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "VAEDecodeAudio"
+      }
+    },
+    {
+      "id": 122,
+      "type": "MiniMaxH3VAEDecodeFast",
+      "pos": [
+        990,
+        4800
+      ],
+      "size": [
+        230,
+        65
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 28,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 280
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 251
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            258,
+            377
+          ]
+        }
+      ],
+      "title": "⚡ MiniMax H3 Fast VAE Decode (Stage 1 Draft: 10s)",
+      "properties": {
+        "Node name for S&R": "MiniMaxH3VAEDecodeFast"
+      },
+      "widgets_values": [
+        true,
+        512,
+        128,
+        "cpu"
+      ]
+    },
+    {
+      "id": 125,
+      "type": "SamplerCustomAdvanced",
+      "pos": [
+        680,
+        4880
+      ],
+      "size": [
+        260,
+        326
+      ],
+      "flags": {},
+      "order": 27,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "noise",
+          "type": "NOISE",
+          "link": 253
+        },
+        {
+          "name": "guider",
+          "type": "GUIDER",
+          "link": 254
+        },
+        {
+          "name": "sampler",
+          "type": "SAMPLER",
+          "link": 255
+        },
+        {
+          "name": "sigmas",
+          "type": "SIGMAS",
+          "link": 256
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 271
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "LATENT",
+          "links": [
+            280,
+            281
+          ]
+        },
+        {
+          "name": "denoised_output",
+          "type": "LATENT",
+          "links": [
+            379
+          ]
+        }
+      ],
+      "title": "Sampler Custom Advanced",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "SamplerCustomAdvanced"
+      }
+    },
+    {
+      "id": 126,
+      "type": "BasicGuider",
+      "pos": [
+        300,
+        4880
+      ],
+      "size": [
+        330,
+        65
+      ],
+      "flags": {},
+      "order": 26,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 285
+        },
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 290
+        }
+      ],
+      "outputs": [
+        {
+          "name": "GUIDER",
+          "type": "GUIDER",
+          "links": [
+            254
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "BasicGuider"
+      }
+    },
+    {
+      "id": 128,
+      "type": "CLIPLoader",
+      "pos": [
+        -1850,
+        4890
+      ],
+      "size": [
+        440,
+        110
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            272
+          ]
+        }
+      ],
+      "title": "CLIP / Text Encoder (Qwen3-VL Heretic)",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "CLIPLoader",
+        "models": [
+          {
+            "name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+            "directory": "text_encoders"
+          }
+        ]
+      },
+      "widgets_values": [
+        "qwen3vl_32b_heretic_minimax_h3_nvfp4.safetensors",
+        "minimax",
+        "default"
+      ],
+      "widgets_values_named": {
+        "clip_name": "qwen3vl_32b_heretic_minimax_h3_nvfp4.safetensors",
+        "type": "minimax",
+        "device": "default"
+      }
+    },
+    {
+      "id": 129,
+      "type": "RandomNoise",
+      "pos": [
+        300,
+        4750
+      ],
+      "size": [
+        330,
+        85
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "NOISE",
+          "type": "NOISE",
+          "links": [
+            253
+          ]
+        }
+      ],
+      "title": "Random Noise",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "RandomNoise"
+      },
+      "widgets_values": [
+        165664715655333,
+        "randomize"
+      ],
+      "widgets_values_named": {
+        "noise_seed": 165664715655333,
+        "control_after_generate": "randomize"
+      }
+    },
+    {
+      "id": 130,
+      "type": "CreateVideo",
+      "pos": [
+        1270,
+        4820
+      ],
+      "size": [
+        260,
+        150
+      ],
+      "flags": {},
+      "order": 30,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 258
+        },
+        {
+          "name": "audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 375
+        }
+      ],
+      "outputs": [
+        {
+          "name": "VIDEO",
+          "type": "VIDEO",
+          "links": [
+            260
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "CreateVideo"
+      },
+      "widgets_values": [
+        24,
+        8
+      ],
+      "widgets_values_named": {
+        "fps": 24,
+        "bit_depth": 8,
+        "color_space": "sRGB",
+        "codec": "none"
+      }
+    },
+    {
+      "id": 131,
+      "type": "ComfyMathExpression",
+      "pos": [
+        -1295.2652781601694,
+        5718.85475016017
+      ],
+      "size": [
+        274.97421875,
+        74
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 21,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "a",
+          "name": "values.a",
+          "type": "FLOAT,INT,BOOLEAN",
+          "link": 261
+        },
+        {
+          "name": "values.b",
+          "shape": 7,
+          "type": "FLOAT,INT,BOOLEAN",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "FLOAT",
+          "type": "FLOAT",
+          "links": []
+        },
+        {
+          "name": "INT",
+          "type": "INT",
+          "links": [
+            275
+          ]
+        },
+        {
+          "name": "BOOL",
+          "type": "BOOLEAN",
+          "links": []
+        }
+      ],
+      "title": "Frame Count Formula (17k + 5 Grid)",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "ComfyMathExpression"
+      },
+      "widgets_values": [
+        "max(5, round(a * 24)) + (5 - (max(5, round(a * 24)) % 17)) % 17"
+      ],
+      "widgets_values_named": {
+        "expression": "max(5, round(a * 24)) + (5 - (max(5, round(a * 24)) % 17)) % 17"
+      }
+    },
+    {
+      "id": 140,
+      "type": "MarkdownNote",
+      "pos": [
+        -1295.2652781601694,
+        6148.85475016017
+      ],
+      "size": [
+        440,
+        240
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Note: Size Settings Reference",
+      "properties": {},
+      "widgets_values": [
+        "| megapixels | Aspect | Output (multiple=32) |\n|---|---|---|\n| 0.2 | 16:9 | 608 x 352 |\n| 0.3 | 16:9 | 736 x 416 |\n| 0.4 | 16:9 | 864 x 480 |\n| 0.5 | 16:9 | 960 x 544 |\n| 0.6 | 16:9 | 1056 x 608 |\n| 0.7 | 16:9 | 1152 x 640 |\n| 0.8 | 16:9 | 1216 x 672 |\n| 0.9 | 16:9 | 1280 x 736 |\n| 0.98 | 16:9 | 1344 x 768 |\n| 1.0 | 16:9 | 1376 x 768 |\n| 1.2 | 16:9 | 1504 x 832 |\n| 1.5 | 16:9 | 1664 x 928 |\n| 1.8 | 16:9 | 1824 x 1024 |\n| 2.0 | 16:9 | 1920 x 1088 |\n"
+      ],
+      "widgets_values_named": {
+        "text": "| megapixels | Aspect | Output (multiple=32) |\n|---|---|---|\n| 0.2 | 16:9 | 608 x 352 |\n| 0.3 | 16:9 | 736 x 416 |\n| 0.4 | 16:9 | 864 x 480 |\n| 0.5 | 16:9 | 960 x 544 |\n| 0.6 | 16:9 | 1056 x 608 |\n| 0.7 | 16:9 | 1152 x 640 |\n| 0.8 | 16:9 | 1216 x 672 |\n| 0.9 | 16:9 | 1280 x 736 |\n| 0.98 | 16:9 | 1344 x 768 |\n| 1.0 | 16:9 | 1376 x 768 |\n| 1.2 | 16:9 | 1504 x 832 |\n| 1.5 | 16:9 | 1664 x 928 |\n| 1.8 | 16:9 | 1824 x 1024 |\n| 2.0 | 16:9 | 1920 x 1088 |\n"
+      },
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 143,
+      "type": "LoraLoaderModelOnly",
+      "pos": [
+        -1358.8087024722774,
+        4617.079962837662
+      ],
+      "size": [
+        350,
+        85
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": []
+        }
+      ],
+      "title": "LoRA 2 (Turbo 4-Step Acceleration)",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "LoraLoaderModelOnly"
+      },
+      "widgets_values": [
+        "minimax_h3_fl2v_turbo_8step_v1.0_comfyui_bf16.safetensors",
+        1
+      ],
+      "widgets_values_named": {
+        "lora_name": "minimax_h3_fl2v_turbo_8step_v1.0_comfyui_bf16.safetensors",
+        "strength_model": 1
+      },
+      "color": "#243",
+      "bgcolor": "#364"
+    },
+    {
+      "id": 144,
+      "type": "VHS_LoadVideo",
+      "pos": [
+        -1413.8450853185818,
+        6186.139410775688
+      ],
+      "size": [
+        440,
+        310
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "meta_batch",
+          "shape": 7,
+          "type": "VHS_BatchManager",
+          "link": null
+        },
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            372
+          ]
+        },
+        {
+          "name": "frame_count",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            373,
+            374,
+            375,
+            378
+          ]
+        },
+        {
+          "name": "video_info",
+          "type": "VHS_VIDEOINFO",
+          "links": null
+        }
+      ],
+      "title": "Reference Video Input (<Video 1>)",
+      "properties": {
+        "cnr_id": "comfyui-videohelpersuite",
+        "ver": "4d907bee61e92c2e65af3bd6383a4e4d356126d1",
+        "Node name for S&R": "VHS_LoadVideo",
+        "aux_id": "Kosinkadink/ComfyUI-VideoHelperSuite"
+      },
+      "widgets_values": {
+        "video": "2026-09-24-02-57-25.mp4",
+        "force_rate": 0,
+        "custom_width": 0,
+        "custom_height": 0,
+        "frame_load_cap": 73,
+        "skip_first_frames": 0,
+        "select_every_nth": 1,
+        "format": "H3",
+        "choose video to upload": "image",
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "2026-09-24-02-57-25.mp4",
+            "type": "input",
+            "format": "video/mp4",
+            "force_rate": 0,
+            "custom_width": 0,
+            "custom_height": 0,
+            "frame_load_cap": 73,
+            "skip_first_frames": 0,
+            "select_every_nth": 1
+          }
+        }
+      },
+      "widgets_values_named": {
+        "video": "2026-09-24-02-57-25.mp4",
+        "force_rate": 0,
+        "custom_width": 0,
+        "custom_height": 0,
+        "frame_load_cap": 73,
+        "skip_first_frames": 0,
+        "select_every_nth": 1,
+        "format": "H3",
+        "choose video to upload": "image",
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "2026-09-24-02-57-25.mp4",
+            "type": "input",
+            "format": "video/mp4",
+            "force_rate": 0,
+            "custom_width": 0,
+            "custom_height": 0,
+            "frame_load_cap": 73,
+            "skip_first_frames": 0,
+            "select_every_nth": 1
+          }
+        }
+      },
+      "color": "#2a363b",
+      "bgcolor": "#3f5159"
+    },
+    {
+      "id": 136,
+      "type": "MiniMaxH3ReferenceToVideo",
+      "pos": [
+        -738.1079045870349,
+        4924.328309678839
+      ],
+      "size": [
+        420,
+        424
+      ],
+      "flags": {},
+      "order": 23,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 272
+        },
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": 273
+        },
+        {
+          "name": "audio_vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": 274
+        },
+        {
+          "label": "ref_image_0",
+          "name": "ref_images.ref_image_0",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 337
+        },
+        {
+          "name": "ref_images.ref_image_1",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 342
+        },
+        {
+          "name": "ref_images.ref_image_2",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 350
+        },
+        {
+          "label": "ref_video_0",
+          "name": "ref_videos.ref_video_0",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 372
+        },
+        {
+          "label": "ref_video_audio_0",
+          "name": "ref_video_audios.ref_video_audio_0",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 373
+        },
+        {
+          "label": "ref_audio_0",
+          "name": "ref_audios.ref_audio_0",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 374
+        },
+        {
+          "name": "ref_audios.ref_audio_1",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        },
+        {
+          "name": "ref_audios.ref_audio_2",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        },
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": 279
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": 276
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": 277
+        },
+        {
+          "name": "length",
+          "type": "INT",
+          "widget": {
+            "name": "length"
+          },
+          "link": 275
+        },
+        {
+          "name": "ref_images.ref_image_3",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            270
+          ]
+        },
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            271
+          ]
+        }
+      ],
+      "title": "MiniMax H3 Reference To Video (Ref2VA)",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "MiniMaxH3ReferenceToVideo"
+      },
+      "widgets_values": [
+        "",
+        608,
+        352,
+        124,
+        "match"
+      ],
+      "widgets_values_named": {
+        "prompt": "",
+        "width": 608,
+        "height": 352,
+        "length": 124,
+        "ref_image_size": "match"
+      },
+      "color": "#234",
+      "bgcolor": "#346"
+    },
+    {
+      "id": 145,
+      "type": "SenseNovaH3DistilledBridge",
+      "pos": [
+        -212.91130723815897,
+        4918.2105131161525
+      ],
+      "size": [
+        360,
+        140
+      ],
+      "flags": {},
+      "order": 25,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 270
+        }
+      ],
+      "outputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "slot_index": 0,
+          "links": [
+            290
+          ]
+        }
+      ],
+      "title": "MiniMax H3 Semantic Bridge (Distilled Adapter)",
+      "properties": {
+        "Node name for S&R": "SenseNovaH3DistilledBridge"
+      },
+      "widgets_values": [
+        "MiniMaxH3_SemanticBridge_v1.safetensors",
+        0.08,
+        "per_token"
+      ],
+      "widgets_values_named": {
+        "distilled_adapter": "MiniMaxH3_SemanticBridge_v1.safetensors",
+        "alpha": 0.08,
+        "magnitude_match": "per_token"
+      },
+      "color": "#254",
+      "bgcolor": "#375"
+    },
+    {
+      "id": 152,
+      "type": "LoadImage",
+      "pos": [
+        -1077.2295593054814,
+        5708.480627586285
+      ],
+      "size": [
+        282.798828125,
+        314
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            342
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.35.0",
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "aSVnMYCnIJ8XSBpJ18uEEqD0sdG2c0m8uSDrPTJ7La9FQbceSTY0h78iPzgac6UbNnBagJiUDJlQ6OJ0J1SBORpTVsSWEuVuHmC9SOE02mQDDedUKbFkxvNCYIuCysq5tkX0YpJpdlmTgp5e92yuuQ.jpg",
+        "image"
+      ],
+      "widgets_values_named": {
+        "image": "aSVnMYCnIJ8XSBpJ18uEEqD0sdG2c0m8uSDrPTJ7La9FQbceSTY0h78iPzgac6UbNnBagJiUDJlQ6OJ0J1SBORpTVsSWEuVuHmC9SOE02mQDDedUKbFkxvNCYIuCysq5tkX0YpJpdlmTgp5e92yuuQ.jpg",
+        "upload": "image"
+      }
+    },
+    {
+      "id": 137,
+      "type": "LoadImage",
+      "pos": [
+        -740.4860142341204,
+        5765.60256234457
+      ],
+      "size": [
+        350,
+        340
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            350
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "title": "Reference Image 0 (<Picture 1>)",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "19795657.jpg",
+        "image"
+      ],
+      "widgets_values_named": {
+        "image": "19795657.jpg",
+        "upload": "image"
+      },
+      "color": "#2a363b",
+      "bgcolor": "#3f5159"
+    },
+    {
+      "id": 139,
+      "type": "LoadImage",
+      "pos": [
+        -345.7101153118359,
+        5744.184261080131
+      ],
+      "size": [
+        350,
+        340
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "title": "Reference Image 1 (<Picture 2>)",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "sadie_sink_riding_on_beach_sexy_sadie_sink_by_artsbyindianguy_dlr2omk-fullview.jpg",
+        "image"
+      ],
+      "widgets_values_named": {
+        "image": "sadie_sink_riding_on_beach_sexy_sadie_sink_by_artsbyindianguy_dlr2omk-fullview.jpg",
+        "upload": "image"
+      },
+      "color": "#2a363b",
+      "bgcolor": "#3f5159"
+    },
+    {
+      "id": 127,
+      "type": "UNETLoader",
+      "pos": [
+        -1850,
+        4750
+      ],
+      "size": [
+        440,
+        90
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            326
+          ]
+        }
+      ],
+      "title": "UNET Loader (Singularity / Stock Ref2VA)",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "UNETLoader",
+        "models": [
+          {
+            "name": "minimax_h3_ref2va_pruned_int8_convrot.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_ref2va_pruned_int8_convrot.safetensors",
+            "directory": "diffusion_models"
+          }
+        ]
+      },
+      "widgets_values": [
+        "Minimax-h3_Singularity_ref2va_Pruned_v1.3_int8.safetensors",
+        "default"
+      ],
+      "widgets_values_named": {
+        "unet_name": "Minimax-h3_Singularity_ref2va_Pruned_v1.3_int8.safetensors",
+        "weight_dtype": "default"
+      },
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 123,
+      "type": "KSamplerSelect",
+      "pos": [
+        300,
+        4990
+      ],
+      "size": [
+        330,
+        65
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "SAMPLER",
+          "type": "SAMPLER",
+          "links": [
+            255
+          ]
+        }
+      ],
+      "title": "KSampler Select",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "KSamplerSelect"
+      },
+      "widgets_values": [
+        "euler"
+      ],
+      "widgets_values_named": {
+        "sampler_name": "euler"
+      }
+    },
+    {
+      "id": 124,
+      "type": "BasicScheduler",
+      "pos": [
+        300,
+        5100
+      ],
+      "size": [
+        330,
+        110
+      ],
+      "flags": {},
+      "order": 24,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 286
+        }
+      ],
+      "outputs": [
+        {
+          "name": "SIGMAS",
+          "type": "SIGMAS",
+          "links": [
+            256
+          ]
+        }
+      ],
+      "title": "Basic Scheduler",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "BasicScheduler"
+      },
+      "widgets_values": [
+        "simple",
+        21,
+        1
+      ],
+      "widgets_values_named": {
+        "scheduler": "simple",
+        "steps": 21,
+        "denoise": 1
+      }
+    },
+    {
+      "id": 153,
+      "type": "LoadImage",
+      "pos": [
+        -1466.6463331571304,
+        5718.046990898334
+      ],
+      "size": [
+        282.798828125,
+        314
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            337
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.35.0",
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "F6pChF9bAAAVGpx.webp",
+        "image"
+      ],
+      "widgets_values_named": {
+        "image": "F6pChF9bAAAVGpx.webp",
+        "upload": "image"
+      }
+    },
+    {
+      "id": 141,
+      "type": "LoraLoaderModelOnly",
+      "pos": [
+        -1360,
+        4750
+      ],
+      "size": [
+        350,
+        85
+      ],
+      "flags": {},
+      "order": 20,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 326
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            327
+          ]
+        }
+      ],
+      "title": "LoRA 1 (Character / Style / NSFW)",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "LoraLoaderModelOnly"
+      },
+      "widgets_values": [
+        "AfterMidnight_ref2va_h3_sexytime_rank64-v1.2.safetensors",
+        0.4
+      ],
+      "widgets_values_named": {
+        "lora_name": "AfterMidnight_ref2va_h3_sexytime_rank64-v1.2.safetensors",
+        "strength_model": 0.4
+      },
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 132,
+      "type": "PrimitiveFloat",
+      "pos": [
+        -1850,
+        5530
+      ],
+      "size": [
+        270,
+        70
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "FLOAT",
+          "type": "FLOAT",
+          "links": [
+            261
+          ]
+        }
+      ],
+      "title": "Duration (Seconds)",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "PrimitiveFloat"
+      },
+      "widgets_values": [
+        20
+      ],
+      "widgets_values_named": {
+        "value": 20
+      },
+      "color": "#322",
+      "bgcolor": "#533"
+    },
+    {
+      "id": 115,
+      "type": "ResolutionSelector",
+      "pos": [
+        -1850,
+        5320
+      ],
+      "size": [
+        270,
+        160
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "showAdvanced": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "links": [
+            276
+          ]
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": [
+            277
+          ]
+        }
+      ],
+      "title": "Resolution Selector (Size)",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "ResolutionSelector"
+      },
+      "widgets_values": [
+        "16:9 (Widescreen)",
+        0.6,
+        32
+      ],
+      "widgets_values_named": {
+        "aspect_ratio": "16:9 (Widescreen)",
+        "megapixels": 0.6,
+        "multiple": 32
+      },
+      "color": "#322",
+      "bgcolor": "#533"
+    },
+    {
+      "id": 138,
+      "type": "PrimitiveStringMultiline",
+      "pos": [
+        -2324.764217773438,
+        5373.601340103153
+      ],
+      "size": [
+        440,
+        240
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            279
+          ]
+        }
+      ],
+      "title": "Text Prompt",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "PrimitiveStringMultiline"
+      },
+      "widgets_values": [
+        "<Video 1>\nPRODUCTION QUALITY: Prestige 35mm Hollywood film stock, Panavision anamorphic lens. Cinematic Hong Kong nightclub bathroom — dark polished slate tiles, misted mirror reflections, vibrant cool-magenta neon tube accent light beneath the vanity, soft golden tungsten rimlight from above. Subsurface scattering on skin, authentic epidermal micro-sweat, zero 3D plastic look.\n\nCAMERA DIRECTIVE: STRICT THIRD-PERSON CINEMATIC OBSERVATION ONLY. ZERO FIRST-PERSON POV. ZERO HANDHELD PHONE JITTER. Smooth mechanical dolly and slow optical pushes.\n\nREFERENCE LOCK:\n- <Picture 1>: LIN. Exact face likeness. Fair porcelain Chinese skin, delicate bone structure, dark eyes, damp wisps of hair framing cheeks. Completely nude.\n- <Picture 2>: ARTWORK COMPOSITION & SCALE. She is TRULY TINY (3.2 inches tall), lying cradled in his massive open cupped palm. Delicate, vulnerable, erotic size disparity.\n\nSCALE & GEOMETRY LOCK:\n- Lin is 3.2 inches tall: her entire body fits within the hollow of Dean's massive left palm. She is fragile, tiny, and dwarfed by his hand.\n- Dean's LEFT HAND is the open cupped cradle held at mid-chest height. NO TABLES. NO DESKS.\n- Dean's RIGHT HAND enters with visible wrist/forearm: his index finger pad covers her clitoris, his thumb presses her breast. No floating limbs.\n- Real gravity: her soft breasts settle naturally to the sides when reclining; his touch depresses her flesh realistically.\n\nAUDIO MANDATE: Heavy club bass thumping through the walls and floor tiles in a slow heartbeat cadence. Intimate wet skin friction. Lin's breathy, fragile whimpers with a soft British accent, culminating in a single broken gasp of his name: \"Dean...\" Dean makes zero spoken sound, only heavy, slow exhales.\n\n————————————————————————————\nSHOT 1 [0s–5s] — DURATION: 5.0s — WIDE CINEMATIC TWO-SHOT: THE LIVING PALM CRADLE\nCamera: 35mm Anamorphic, third-person low-angle three-quarter profile. Deep moody shadows with magenta neon rim-lighting cutting across Dean's muscular frame.\n\nDean stands tall in the dim nightclub bathroom, broad-shouldered and shirtless. His massive, scarred left arm is raised to chest height, forearm horizontal, holding his colossal left hand open and gently cupped. \n\nLying nestled in the center of his massive palm is a completely nude, miniature Lin (<Picture 1>), exquisitely tiny at 3.2 inches tall. She reclines on her back against his palm creases, completely dwarfed by his hand. Her lean, athletic tomboy physique is pale and fair against his tanned skin; her medium-to-large breasts spill softly to either side under gravity.\n\nDean's right hand enters the frame from the right, with wrist and forearm fully attached. His colossal index fingertip, broad and warm, gently settles between her parted thighs, resting directly on her slick, wet clitoris.\n\nLin gasps, her tiny back arching softly into his palm, fair skin flushing pink. Her soft, breathy British voice breaks the bathroom silence: \"Dean... wait, I'm already so sensitive...\"\n\nTRANSITION: Smooth cinematic push-in to medium close.\n————————————————————————————\n\nSHOT 2 [5s–10s] — DURATION: 5.0s — MEDIUM CLOSE: THE TWO-HANDED RHYTHM\nCamera: 50mm Prime, high three-quarter angle looking down into the cupped palm. Soft magenta neon highlights glinting off glistening wet skin.\n\nLin lies completely vulnerable in the cradle of his left fingers. Her flat, toned stomach rises and falls with rapid, shallow breaths. \n\nDean's right index finger begins slow, deliberate circular friction directly over her glistening, swollen clitoris. The wet, tacky sound of skin-on-skin friction is immediate and rhythmic. \n\nSimultaneously, Dean's colossal right thumb descends from above and gently presses flat against her soft right breast. The soft breast tissue depresses deeply and realistically under his thumb pad. He holds the firm pressure for a beat, then lifts his thumb—her breast bounces and settles with natural soft-tissue rebound.\n\nLin's eyes squeeze shut in sensory overload. Her delicate hands clutch helplessly at the edge of his giant palm crease. Her thighs tremble and clamp inward around his circling finger. A ragged, breathy moan spills past her parted lips: \"Mmmh... God, Dean... both at the same time is too much...\"\n\nTRANSITION: Seamless cut to intimate macro.\n————————————————————————————\n\nSHOT 3 [10s–15s] — DURATION: 5.0s — MACRO CLOSE-UP: THE ESCALATION\nCamera: 100mm Macro Cinema Lens, shallow depth of field. Razor focus on her flushed face, heaving chest, and his active hands.\n\nDean accelerates the rhythm. His index finger circles faster, maintaining relentless downward pressure on her dripping clit. His right thumb repeatedly presses, strokes, and releases her right breast, causing continuous soft bounces.\n\nLin is completely lost to pleasure. Her fair porcelain neck and collarbones are flushed deep rose-pink, glistening with a light sheen of sweat. Her head lolls back against the fleshy heel of his thumb. \n\nHer hips begin bucking upward in involuntary, needy pulses against his massive fingertip. Her mouth falls open, breath catching in her throat, incapable of speaking sentences, letting out soft, broken, high-pitched whimpers that harmonize with the low pulse of the nightclub bass below.\n\nTRANSITION: Cut to the climactic wide-medium angle.\n————————————————————————————\n\nSHOT 4 [15s–20s] — DURATION: 5.0s — THE ORGASMIC BOUNCE & LINGERING AFTERMATH (NO BLACKOUT)\nCamera: 50mm Master Prime, locked-off third-person medium angle. Fully illuminated, rock-steady hold throughout.\n\nTHE CLIMAX (15s–17s):\nDean delivers the final decisive movement: his right index finger presses firmly down in a deep, circular grind against her clit while his right thumb compresses and snaps softly off her right breast.\n\nLin hits an explosive, full-body orgasm. Her back arches sharply off his palm, her flat stomach clenching in violent ripples. \nTHE DUAL BREAST BOUNCE: Both of her medium-to-large breasts bounce violently and simultaneously—the right one from the snap-release of his thumb, the left one from the violent shudder of her arching body. They jiggle in lingering, quivering shockwaves. \nHer mouth opens wide on a ragged, breathless, broken cry of bliss: \"...Dean!\"\n\nTHE LINGERING AFTERMATH (17s–20s):\nLin collapses limp, totally spent, melting flat into the hollow of his warm left palm. Her chest heaves in deep, shuddering panting. Her limbs rest heavy and splayed in his hand.\n\nDean lifts his right hand away slowly, revealing a glistening strand of moisture that pulls from her clit and snaps softly. His thumb gently strokes her flushed cheek with tender, protective reverence.\n\nTHE FRAME HOLDS FULLY LIT: Magenta neon washes over her tiny, glowing, exhausted body cradled in his hand. The club bass thumps softly as her chest flutters until the very last frame. ZERO CUT TO BLACK.\n————————————————————————————\n"
+      ],
+      "widgets_values_named": {
+        "value": "PRODUCTION QUALITY: Prestige 35mm Hollywood film stock, Panavision anamorphic lens. Cinematic Hong Kong nightclub bathroom — dark polished slate tiles, misted mirror reflections, vibrant cool-magenta neon tube accent light beneath the vanity, soft golden tungsten rimlight from above. Subsurface scattering on skin, authentic epidermal micro-sweat, zero 3D plastic look.\n\nCAMERA DIRECTIVE: STRICT THIRD-PERSON CINEMATIC OBSERVATION ONLY. ZERO FIRST-PERSON POV. ZERO HANDHELD PHONE JITTER. Smooth mechanical dolly and slow optical pushes.\n\nREFERENCE LOCK:\n- <Picture 1>: LIN. Exact face likeness. Fair porcelain Chinese skin, delicate bone structure, dark eyes, damp wisps of hair framing cheeks. Completely nude.\n- <Picture 2>: ARTWORK COMPOSITION & SCALE. She is TRULY TINY (3.2 inches tall), lying cradled in his massive open cupped palm. Delicate, vulnerable, erotic size disparity.\n\nSCALE & GEOMETRY LOCK:\n- Lin is 3.2 inches tall: her entire body fits within the hollow of Dean's massive left palm. She is fragile, tiny, and dwarfed by his hand.\n- Dean's LEFT HAND is the open cupped cradle held at mid-chest height. NO TABLES. NO DESKS.\n- Dean's RIGHT HAND enters with visible wrist/forearm: his index finger pad covers her clitoris, his thumb presses her breast. No floating limbs.\n- Real gravity: her soft breasts settle naturally to the sides when reclining; his touch depresses her flesh realistically.\n\nAUDIO MANDATE: Heavy club bass thumping through the walls and floor tiles in a slow heartbeat cadence. Intimate wet skin friction. Lin's breathy, fragile whimpers with a soft British accent, culminating in a single broken gasp of his name: \"Dean...\" Dean makes zero spoken sound, only heavy, slow exhales.\n\n————————————————————————————\nSHOT 1 [0s–5s] — DURATION: 5.0s — WIDE CINEMATIC TWO-SHOT: THE LIVING PALM CRADLE\nCamera: 35mm Anamorphic, third-person low-angle three-quarter profile. Deep moody shadows with magenta neon rim-lighting cutting across Dean's muscular frame.\n\nDean stands tall in the dim nightclub bathroom, broad-shouldered and shirtless. His massive, scarred left arm is raised to chest height, forearm horizontal, holding his colossal left hand open and gently cupped. \n\nLying nestled in the center of his massive palm is a completely nude, miniature Lin (<Picture 1>), exquisitely tiny at 3.2 inches tall. She reclines on her back against his palm creases, completely dwarfed by his hand. Her lean, athletic tomboy physique is pale and fair against his tanned skin; her medium-to-large breasts spill softly to either side under gravity.\n\nDean's right hand enters the frame from the right, with wrist and forearm fully attached. His colossal index fingertip, broad and warm, gently settles between her parted thighs, resting directly on her slick, wet clitoris.\n\nLin gasps, her tiny back arching softly into his palm, fair skin flushing pink. Her soft, breathy British voice breaks the bathroom silence: \"Dean... wait, I'm already so sensitive...\"\n\nTRANSITION: Smooth cinematic push-in to medium close.\n————————————————————————————\n\nSHOT 2 [5s–10s] — DURATION: 5.0s — MEDIUM CLOSE: THE TWO-HANDED RHYTHM\nCamera: 50mm Prime, high three-quarter angle looking down into the cupped palm. Soft magenta neon highlights glinting off glistening wet skin.\n\nLin lies completely vulnerable in the cradle of his left fingers. Her flat, toned stomach rises and falls with rapid, shallow breaths. \n\nDean's right index finger begins slow, deliberate circular friction directly over her glistening, swollen clitoris. The wet, tacky sound of skin-on-skin friction is immediate and rhythmic. \n\nSimultaneously, Dean's colossal right thumb descends from above and gently presses flat against her soft right breast. The soft breast tissue depresses deeply and realistically under his thumb pad. He holds the firm pressure for a beat, then lifts his thumb—her breast bounces and settles with natural soft-tissue rebound.\n\nLin's eyes squeeze shut in sensory overload. Her delicate hands clutch helplessly at the edge of his giant palm crease. Her thighs tremble and clamp inward around his circling finger. A ragged, breathy moan spills past her parted lips: \"Mmmh... God, Dean... both at the same time is too much...\"\n\nTRANSITION: Seamless cut to intimate macro.\n————————————————————————————\n\nSHOT 3 [10s–15s] — DURATION: 5.0s — MACRO CLOSE-UP: THE ESCALATION\nCamera: 100mm Macro Cinema Lens, shallow depth of field. Razor focus on her flushed face, heaving chest, and his active hands.\n\nDean accelerates the rhythm. His index finger circles faster, maintaining relentless downward pressure on her dripping clit. His right thumb repeatedly presses, strokes, and releases her right breast, causing continuous soft bounces.\n\nLin is completely lost to pleasure. Her fair porcelain neck and collarbones are flushed deep rose-pink, glistening with a light sheen of sweat. Her head lolls back against the fleshy heel of his thumb. \n\nHer hips begin bucking upward in involuntary, needy pulses against his massive fingertip. Her mouth falls open, breath catching in her throat, incapable of speaking sentences, letting out soft, broken, high-pitched whimpers that harmonize with the low pulse of the nightclub bass below.\n\nTRANSITION: Cut to the climactic wide-medium angle.\n————————————————————————————\n\nSHOT 4 [15s–20s] — DURATION: 5.0s — THE ORGASMIC BOUNCE & LINGERING AFTERMATH (NO BLACKOUT)\nCamera: 50mm Master Prime, locked-off third-person medium angle. Fully illuminated, rock-steady hold throughout.\n\nTHE CLIMAX (15s–17s):\nDean delivers the final decisive movement: his right index finger presses firmly down in a deep, circular grind against her clit while his right thumb compresses and snaps softly off her right breast.\n\nLin hits an explosive, full-body orgasm. Her back arches sharply off his palm, her flat stomach clenching in violent ripples. \nTHE DUAL BREAST BOUNCE: Both of her medium-to-large breasts bounce violently and simultaneously—the right one from the snap-release of his thumb, the left one from the violent shudder of her arching body. They jiggle in lingering, quivering shockwaves. \nHer mouth opens wide on a ragged, breathless, broken cry of bliss: \"...Dean!\"\n\nTHE LINGERING AFTERMATH (17s–20s):\nLin collapses limp, totally spent, melting flat into the hollow of his warm left palm. Her chest heaves in deep, shuddering panting. Her limbs rest heavy and splayed in his hand.\n\nDean lifts his right hand away slowly, revealing a glistening strand of moisture that pulls from her clit and snaps softly. His thumb gently strokes her flushed cheek with tender, protective reverence.\n\nTHE FRAME HOLDS FULLY LIT: Magenta neon washes over her tiny, glowing, exhausted body cradled in his hand. The club bass thumps softly as her chest flutters until the very last frame. ZERO CUT TO BLACK.\n————————————————————————————\n"
+      },
+      "color": "#322",
+      "bgcolor": "#533"
+    },
+    {
+      "id": 155,
+      "type": "ApplyMiniMaxH3FirstBlockCache",
+      "pos": [
+        -742.2206450213624,
+        4461.892451659546
+      ],
+      "size": [
+        400,
+        340
+      ],
+      "flags": {},
+      "order": 22,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 327
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            285,
+            286
+          ]
+        }
+      ],
+      "title": "⚡ MiniMax H3 FirstBlockCache (Active Accelerator + Forecast)",
+      "properties": {
+        "cnr_id": "ComfyUI-MiniMaxH3-FirstBlockCache",
+        "ver": "f7a27128e73e1859f2295e64698164203799029d",
+        "Node name for S&R": "ApplyMiniMaxH3FirstBlockCache"
+      },
+      "widgets_values": [
+        "H3 Safe — 0.08 / max 2",
+        0.06,
+        0.2,
+        0.85,
+        1,
+        true,
+        true
+      ],
+      "widgets_values_named": {
+        "mode": "H3 Safe — 0.08 / max 2",
+        "threshold": 0.12,
+        "start_percent": 0.1,
+        "end_percent": 0.95,
+        "max_consecutive_hits": 2,
+        "temporal_guard": false
+      },
+      "color": "#242",
+      "bgcolor": "#363"
+    },
+    {
+      "id": 157,
+      "type": "LoadImage",
+      "pos": [
+        59.89251899224826,
+        5778.477854098131
+      ],
+      "size": [
+        282.798828125,
+        314
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": []
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.35.0",
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "gemini_generated_image_4wlu0v4wlu0v4wlu_by_gts59io_dlj5d42-fullview.jpg",
+        "image"
+      ],
+      "widgets_values_named": {
+        "image": "gemini_generated_image_4wlu0v4wlu0v4wlu_by_gts59io_dlj5d42-fullview.jpg",
+        "upload": "image"
+      }
+    },
+    {
+      "id": 158,
+      "type": "LoadImage",
+      "pos": [
+        524.3799596280022,
+        5674.6931851757545
+      ],
+      "size": [
+        282.798828125,
+        314
+      ],
+      "flags": {},
+      "order": 19,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": []
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.35.0",
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "Giant-Hunting-14.jpg",
+        "image"
+      ],
+      "widgets_values_named": {
+        "image": "Giant-Hunting-14.jpg",
+        "upload": "image"
+      }
+    },
+    {
+      "id": 160,
+      "type": "VAELoader",
+      "pos": [
+        -1850.0,
+        4850.0
+      ],
+      "size": [
+        315.0,
+        60.0
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "minimax_h3_video_vae_fp16.safetensors"
+      ],
+      "title": "VAE Loader (Stage 2: Standard Video VAE for 2K)"
+    },
+    {
+      "id": 169,
+      "type": "H3UpscaleApprovalGate",
+      "pos": [
+        2040,
+        4720
+      ],
+      "size": [
+        430,
+        290
+      ],
+      "flags": {},
+      "order": 32,
+      "mode": 0,
+      "title": "⚡ Stage 1 -> Stage 2 Approval Gate & 2x/4x Option (No Timer)",
+      "inputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "link": 376
+        },
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "shape": 7,
+          "link": 377
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "shape": 7,
+          "link": 378
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "shape": 7,
+          "link": 379
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "links": [
+            381
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": [],
+          "slot_index": 1
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [],
+          "slot_index": 2
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": [],
+          "slot_index": 3
+        },
+        {
+          "name": "scale_float",
+          "type": "FLOAT",
+          "links": [
+            382
+          ],
+          "slot_index": 4
+        },
+        {
+          "name": "target_width",
+          "type": "INT",
+          "links": [],
+          "slot_index": 5
+        },
+        {
+          "name": "target_height",
+          "type": "INT",
+          "links": [],
+          "slot_index": 6
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "H3UpscaleApprovalGate"
+      },
+      "widgets_values": [
+        "Ask Approval in UI (Wait Indefinitely - No Timer)",
+        "2x Upscale (1440p / 2K)"
+      ],
+      "color": "#14532d",
+      "bgcolor": "#052e16"
+    },
+    {
+      "id": 170,
+      "type": "ReCaVSRLoader",
+      "pos": [
+        2040,
+        4520
+      ],
+      "size": [
+        430,
+        90
+      ],
+      "flags": {},
+      "order": 33,
+      "mode": 0,
+      "title": "ReCaVSR Model Loader (Wan 2.2 TI2V-5B Streaming VSR)",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "model",
+          "type": "RECAVSR",
+          "links": [
+            380
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ReCaVSRLoader"
+      },
+      "widgets_values": [
+        "transformer_int8_convrot.safetensors"
+      ],
+      "color": "#1e3a5f",
+      "bgcolor": "#0d1b2a"
+    },
+    {
+      "id": 171,
+      "type": "ReCaVSRUpscale",
+      "pos": [
+        2540,
+        4550
+      ],
+      "size": [
+        400,
+        340
+      ],
+      "flags": {},
+      "order": 34,
+      "mode": 0,
+      "title": "ReCaVSR Upscale Video (R2V 2x / 4x Streaming VSR + FlashDecoder)",
+      "inputs": [
+        {
+          "name": "model",
+          "type": "RECAVSR",
+          "link": 380
+        },
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "shape": 7,
+          "link": 381
+        },
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "shape": 7,
+          "link": null
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "shape": 7,
+          "link": null
+        },
+        {
+          "name": "scale",
+          "type": "FLOAT",
+          "widget": {
+            "name": "scale"
+          },
+          "link": 382
+        }
+      ],
+      "outputs": [
+        {
+          "name": "VIDEO",
+          "type": "VIDEO",
+          "links": [
+            383
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ReCaVSRUpscale"
+      },
+      "widgets_values": [
+        2.0,
+        "wavelet",
+        42,
+        "fixed",
+        "flashdecoder",
+        "fast",
+        false,
+        "auto",
+        24.0
+      ],
+      "color": "#14532d",
+      "bgcolor": "#052e16"
+    },
+    {
+      "id": 180,
+      "type": "SaveVideo",
+      "pos": [
+        3010,
+        4550
+      ],
+      "size": [
+        400,
+        592
+      ],
+      "flags": {},
+      "order": 35,
+      "mode": 0,
+      "title": "Save Video (Stage 2: R2V ReCaVSR 2x/4x Upscaled Master)",
+      "inputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "link": 383
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "Node name for S&R": "SaveVideo"
+      },
+      "widgets_values": [
+        "video/MiniMax_H3_R2V_ReCaVSR_Master",
+        "auto",
+        "auto"
+      ]
+    },
+    {
+      "id": 181,
+      "type": "MarkdownNote",
+      "pos": [
+        2040,
+        5080
+      ],
+      "size": [
+        880,
+        440
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "title": "Guide: ReCaVSR One-Step Streaming Video Super-Resolution (R2V)",
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "MarkdownNote"
+      },
+      "widgets_values": [
+        "# ReCaVSR One-Step Streaming Super-Resolution (R2V)\n**Powered by Wan 2.2 TI2V-5B + FlashDecoder (`PedroMarinhoDev/ComfyUI-ReCaVSR`)**\n\n### 1. Stage 1: 768p Draft Video Generation\n- Generates and saves the playable 768p draft video in **Save Video (Stage 1)** first.\n\n### 2. Interactive Approval Gate (Zero Timer — No `Ctrl+M` Needed!)\n- As soon as the 768p draft finishes, execution pauses indefinitely at **⚡ Stage 1 -> Stage 2 Approval Gate (Node #169)**.\n- Watch the 768p video right in the UI, then click one of the interactive buttons (either on the top floating bar or on Node #169):\n  - **✅ Approve & Upscale (2x / 2K)**: Runs ReCaVSR at **2.0x** scale (e.g., 768p → 1536p / 2K).\n  - **🚀 Approve & Upscale (4x / 4K)**: Runs ReCaVSR at **4.0x** scale (e.g., 768p → 3072p / 4K).\n  - **🛑 Stop Here (Keep 768p Only)**: Stops immediately without running the upscaler!\n- You can also change `approval_mode` on Node #169 to `Auto-Upscale Immediately` or `Stop After 768p Draft Only`, and set the default `upscale_factor` (`2x` vs `4x`).\n\n### 3. ReCaVSR Settings (Node #171)\n- **Model**: `transformer_int8_convrot.safetensors` (1.8x faster, 4 GB less VRAM) or `transformer.safetensors` (BF16).\n- **Decoder**: `flashdecoder` (streams block-by-block in 8–10 GB VRAM and preserves audio & frame rate automatically).\n- **Color Fix**: `wavelet` (preserves exact Stage 1 color grading while restoring high-frequency detail).\n"
+      ],
+      "color": "#222",
+      "bgcolor": "#000"
+    }
+  ],
+  "links": [
+    [
+      250,
+      120,
+      0,
+      121,
+      1,
+      "VAE"
+    ],
+    [
+      251,
+      119,
+      0,
+      122,
+      1,
+      "VAE"
+    ],
+    [
+      253,
+      129,
+      0,
+      125,
+      0,
+      "NOISE"
+    ],
+    [
+      254,
+      126,
+      0,
+      125,
+      1,
+      "GUIDER"
+    ],
+    [
+      255,
+      123,
+      0,
+      125,
+      2,
+      "SAMPLER"
+    ],
+    [
+      256,
+      124,
+      0,
+      125,
+      3,
+      "SIGMAS"
+    ],
+    [
+      258,
+      122,
+      0,
+      130,
+      0,
+      "IMAGE"
+    ],
+    [
+      270,
+      136,
+      0,
+      145,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      271,
+      136,
+      1,
+      125,
+      4,
+      "LATENT"
+    ],
+    [
+      280,
+      125,
+      0,
+      122,
+      0,
+      "LATENT"
+    ],
+    [
+      281,
+      125,
+      0,
+      121,
+      0,
+      "LATENT"
+    ],
+    [
+      285,
+      155,
+      0,
+      126,
+      0,
+      "MODEL"
+    ],
+    [
+      286,
+      155,
+      0,
+      124,
+      0,
+      "MODEL"
+    ],
+    [
+      290,
+      145,
+      0,
+      126,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      326,
+      127,
+      0,
+      141,
+      0,
+      "MODEL"
+    ],
+    [
+      327,
+      141,
+      0,
+      155,
+      0,
+      "MODEL"
+    ],
+    [
+      260,
+      130,
+      0,
+      92,
+      0,
+      "VIDEO"
+    ],
+    [
+      261,
+      132,
+      0,
+      131,
+      0,
+      "FLOAT"
+    ],
+    [
+      272,
+      128,
+      0,
+      136,
+      0,
+      "CLIP"
+    ],
+    [
+      273,
+      119,
+      0,
+      136,
+      1,
+      "VAE"
+    ],
+    [
+      274,
+      120,
+      0,
+      136,
+      2,
+      "VAE"
+    ],
+    [
+      337,
+      153,
+      0,
+      136,
+      3,
+      "IMAGE"
+    ],
+    [
+      342,
+      152,
+      0,
+      136,
+      4,
+      "IMAGE"
+    ],
+    [
+      350,
+      137,
+      0,
+      136,
+      5,
+      "IMAGE"
+    ],
+    [
+      279,
+      138,
+      0,
+      136,
+      11,
+      "STRING"
+    ],
+    [
+      276,
+      115,
+      0,
+      136,
+      12,
+      "INT"
+    ],
+    [
+      277,
+      115,
+      1,
+      136,
+      13,
+      "INT"
+    ],
+    [
+      275,
+      131,
+      1,
+      136,
+      14,
+      "INT"
+    ],
+    [
+      372,
+      144,
+      0,
+      136,
+      6,
+      "IMAGE"
+    ],
+    [
+      373,
+      144,
+      2,
+      136,
+      7,
+      "AUDIO"
+    ],
+    [
+      374,
+      144,
+      2,
+      136,
+      8,
+      "AUDIO"
+    ],
+    [
+      375,
+      144,
+      2,
+      130,
+      1,
+      "AUDIO"
+    ],
+    [
+      376,
+      92,
+      0,
+      169,
+      0,
+      "VIDEO"
+    ],
+    [
+      377,
+      122,
+      0,
+      169,
+      1,
+      "IMAGE"
+    ],
+    [
+      378,
+      144,
+      2,
+      169,
+      2,
+      "AUDIO"
+    ],
+    [
+      379,
+      125,
+      1,
+      169,
+      3,
+      "LATENT"
+    ],
+    [
+      380,
+      170,
+      0,
+      171,
+      0,
+      "RECAVSR"
+    ],
+    [
+      381,
+      169,
+      0,
+      171,
+      1,
+      "VIDEO"
+    ],
+    [
+      382,
+      169,
+      4,
+      171,
+      4,
+      "FLOAT"
+    ],
+    [
+      383,
+      171,
+      0,
+      180,
+      0,
+      "VIDEO"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "Models",
+      "bounding": [
+        -1467.9333557128907,
+        4871.533355712889,
+        700,
+        670
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "Sampling",
+      "bounding": [
+        -280,
+        4840,
+        690,
+        670
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "Conditioning",
+      "bounding": [
+        -790,
+        4840,
+        480,
+        670
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "Decoding and create video",
+      "bounding": [
+        440,
+        4840,
+        670,
+        670
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "User Inputs",
+      "bounding": [
+        -1564.0722400266695,
+        5624.096287522084,
+        1930,
+        900
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 6,
+      "title": "🟢 STAGE 2: ReCaVSR 2x/4x SUPER-RESOLUTION [R2V] (Pauses at Approval Gate — No Timer!)",
+      "bounding": [
+        2000,
+        4420,
+        1460,
+        1140
+      ],
+      "color": "#1b4332",
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.7513148009015777,
+      "offset": [
+        2448.0935310390714,
+        -4955.9304379949635
+      ]
+    },
+    "frontendVersion": "1.53.10",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

@@ -1,0 +1,5 @@
+# Left out of the package published to the Comfy Registry: README images, dev scripts and docs.
+assets/
+dev/
+docs/
+.github/
