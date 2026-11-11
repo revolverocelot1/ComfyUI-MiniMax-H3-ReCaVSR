@@ -24,8 +24,16 @@ Complete two-stage ComfyUI pipeline combining **MiniMax-H3** (`Text-to-Video`, `
 
 <table>
   <tr>
-    <td width="50%" valign="top"><img alt="People with umbrellas on a rainy night street at 4x: a 960 by 480 crop of the input, bicubic, above the same crop from ReCaVSR" src="assets/hero-street.webp" width="100%"></td>
-    <td width="50%" valign="top"><img alt="A portrait at 4x: a 480 by 960 crop of the input, bicubic, beside the same crop from ReCaVSR" src="assets/hero-portrait.webp" width="100%"></td>
+    <td width="50%" valign="top">
+      <a href="assets/hero-street.mp4"><img alt="People with umbrellas on a rainy night street at 4x: a 960 by 480 crop of the input, bicubic, above the same crop from ReCaVSR" src="assets/hero-street.gif" width="100%"></a>
+      <br>
+      <p align="center"><b><a href="assets/hero-street.mp4">▶ Play Rainy Street Video (.mp4)</a></b></p>
+    </td>
+    <td width="50%" valign="top">
+      <a href="assets/hero-portrait.mp4"><img alt="A portrait at 4x: a 480 by 960 crop of the input, bicubic, beside the same crop from ReCaVSR" src="assets/hero-portrait.webp" width="100%"></a>
+      <br>
+      <p align="center"><b><a href="assets/hero-portrait.mp4">▶ Play Portrait Video (.mp4)</a></b></p>
+    </td>
   </tr>
 </table>
 
