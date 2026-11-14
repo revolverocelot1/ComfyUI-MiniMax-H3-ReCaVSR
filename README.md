@@ -56,7 +56,7 @@ Complete two-stage ComfyUI pipeline combining **MiniMax-H3** (`Text-to-Video`, `
 
 ## Workflows (MiniMax-H3 + ReCaVSR `2x` / `4x`)
 
-All three production workflows are located in [`workflows/`](workflows/) (and mirrored in [`example_workflows/`](example_workflows/)) with all original prompts, negative prompts, and Markdown instruction notes intact:
+All three production workflows are located in [`workflows/`](workflows/) (and mirrored in [`example_workflows/`](example_workflows/)) as clean, ready-to-run templates (bring your own prompt; R2V pre-configured for image reference `<Picture 1>` with synthesized MiniMax-H3 stereo audio):
 
 | Workflow File | Modality | Stage 1 Output (Playable Draft) | Stage 2 Output (After Approval) |
 | :--- | :--- | :--- | :--- |

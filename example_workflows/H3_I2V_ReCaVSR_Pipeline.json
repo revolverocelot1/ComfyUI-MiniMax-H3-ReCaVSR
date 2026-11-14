@@ -1,8 +1,8 @@
 {
   "id": "minimax_h3_i2v_recavsr_pipeline",
   "revision": 0,
-  "last_node_id": 181,
-  "last_link_id": 500,
+  "last_node_id": 192,
+  "last_link_id": 359,
   "nodes": [
     {
       "id": 92,
@@ -45,7 +45,7 @@
         "auto"
       ],
       "widgets_values_named": {
-        "filename_prefix": "video/MiniMax_H3",
+        "filename_prefix": "video/MiniMax_H3_I2V_768p_Draft",
         "format": "auto",
         "codec": "auto"
       },
@@ -67,13 +67,13 @@
       "mode": 0,
       "inputs": [],
       "outputs": [],
-      "title": "MiniMax H3 — Ref2VA + Semantic Bridge + LoRA",
+      "title": "MiniMax H3 Image-to-Video + Semantic Bridge + LoRA",
       "properties": {},
       "widgets_values": [
-        "# MiniMax H3 Reference-to-Video + Semantic Bridge + Dual LoRA\n\n**All wires are fully pre-connected! Zero manual wiring needed.**\n\n### 1. Semantic Bridge Adapter (Node #145)\n- **Adapter**: `MiniMaxH3_SemanticBridge_v1.safetensors`\n- **Alpha**: `0.08` (conservative recommended value for Ref2VA)\n- **Magnitude Match**: `per_token`\n- *Author Note*: Semantic Bridge was distilled on standard text conditioning. In Ref2VA, keep alpha between `0.05 - 0.10` to enhance prompt grounding without degrading reference facial/lip articulation.\n\n### 2. UNET Loader (Diffusion Model)\n- **Singularity**: `Minimax-h3_Singularity_ref2va_Pruned_v1.3_int8.safetensors`\n- **Stock Ref2VA**: `minimax_h3_ref2va_pruned_int8_convrot.safetensors`\n\n### 3. Dual LoRA Chain\n- **LoRA 1**: Character / Style / NSFW (Megan Fox, Sydney Sweeney, etc.)\n- **LoRA 2**: Turbo 4-Step (`1.0` strength for fast 4-step; `0.0` for 20-step native)\n\n### 4. Reference Media Tags in Prompt\n- Use `<Picture 1>` to reference Reference Image 0\n- Use `<Picture 2>` to reference Reference Image 1\n- Use `<Video 1>` to reference Reference Video Input\n"
+        "# MiniMax H3 Image-to-Video + Semantic Bridge + LoRA\n\n**All wires are fully pre-connected for First-Frame Image-to-Video (`#137`) with synthesized stereo audio (`VAE Decode Audio`).**\n\n### 1. Semantic Bridge Adapter (Node #145)\n- **Adapter**: `MiniMaxH3_SemanticBridge_v1.safetensors`\n- **Alpha**: `0.08` (conservative recommended value)\n- **Magnitude Match**: `per_token`\n\n### 2. UNET Loader (Diffusion Model)\n- **Singularity**: `Minimax-h3_Singularity_ref2va_Pruned_v1.3_int8.safetensors`\n- **Stock Ref2VA**: `minimax_h3_ref2va_pruned_int8_convrot.safetensors`\n\n### 3. LoRA Chain\n- **LoRA 1**: Character / Style (`strength = 0.4` default)\n- **LoRA 2**: Turbo / FL2V acceleration (optional, bypassed by default)\n\n### 4. Inputs\n- Load your starting frame in **First Frame Image** (Node `#137`) and write your prompt in **Text Prompt** (Node `#138`).\n- Stage 1 synthesizes video + stereo audio cleanly via `VAE Decode (Audio)` (`#121`).\n- Use **Stage 2 Upscale & Pre-Approve Mode** (Node `#192`, below Prompt & Resolution) to pre-select **2x**, **4x**, **Custom**, **Ask Approval**, or **Draft Only**."
       ],
       "widgets_values_named": {
-        "text": "# MiniMax H3 Reference-to-Video + Semantic Bridge + Dual LoRA\n\n**All wires are fully pre-connected! Zero manual wiring needed.**\n\n### 1. Semantic Bridge Adapter (Node #145)\n- **Adapter**: `MiniMaxH3_SemanticBridge_v1.safetensors`\n- **Alpha**: `0.08` (conservative recommended value for Ref2VA)\n- **Magnitude Match**: `per_token`\n- *Author Note*: Semantic Bridge was distilled on standard text conditioning. In Ref2VA, keep alpha between `0.05 - 0.10` to enhance prompt grounding without degrading reference facial/lip articulation.\n\n### 2. UNET Loader (Diffusion Model)\n- **Singularity**: `Minimax-h3_Singularity_ref2va_Pruned_v1.3_int8.safetensors`\n- **Stock Ref2VA**: `minimax_h3_ref2va_pruned_int8_convrot.safetensors`\n\n### 3. Dual LoRA Chain\n- **LoRA 1**: Character / Style / NSFW (Megan Fox, Sydney Sweeney, etc.)\n- **LoRA 2**: Turbo 4-Step (`1.0` strength for fast 4-step; `0.0` for 20-step native)\n\n### 4. Reference Media Tags in Prompt\n- Use `<Picture 1>` to reference Reference Image 0\n- Use `<Picture 2>` to reference Reference Image 1\n- Use `<Video 1>` to reference Reference Video Input\n"
+        "text": "# MiniMax H3 Image-to-Video + Semantic Bridge + LoRA\n\n**All wires are fully pre-connected for First-Frame Image-to-Video (`#137`) with synthesized stereo audio (`VAE Decode Audio`).**\n\n### 1. Semantic Bridge Adapter (Node #145)\n- **Adapter**: `MiniMaxH3_SemanticBridge_v1.safetensors`\n- **Alpha**: `0.08` (conservative recommended value)\n- **Magnitude Match**: `per_token`\n\n### 2. UNET Loader (Diffusion Model)\n- **Singularity**: `Minimax-h3_Singularity_ref2va_Pruned_v1.3_int8.safetensors`\n- **Stock Ref2VA**: `minimax_h3_ref2va_pruned_int8_convrot.safetensors`\n\n### 3. LoRA Chain\n- **LoRA 1**: Character / Style (`strength = 0.4` default)\n- **LoRA 2**: Turbo / FL2V acceleration (optional, bypassed by default)\n\n### 4. Inputs\n- Load your starting frame in **First Frame Image** (Node `#137`) and write your prompt in **Text Prompt** (Node `#138`).\n- Stage 1 synthesizes video + stereo audio cleanly via `VAE Decode (Audio)` (`#121`).\n- Use **Stage 2 Upscale & Pre-Approve Mode** (Node `#192`, below Prompt & Resolution) to pre-select **2x**, **4x**, **Custom**, **Ask Approval**, or **Draft Only**."
       },
       "color": "#222",
       "bgcolor": "#000"
@@ -97,7 +97,7 @@
       "title": "Note: Model Links",
       "properties": {},
       "widgets_values": [
-        "minimax_h3_video_vae_fp16.safetensors"
+        "## Model Links\n[🤗 Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3)\n\n**vae**\n\n- [minimax_h3_video_vae_fp16.safetensors](https://huggingface.co/speach1sdef178/MiniMax-H3/resolve/main/minimax_h3_video_vae_fp16.safetensors)\n- [minimax_h3_video_vae_fp16.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_video_vae_fp16.safetensors)\n- [minimax_h3_audio_vae_fp32.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_audio_vae_fp32.safetensors)\n\n**diffusion_models**\n\n- [minimax_h3_ref2va_pruned_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_ref2va_pruned_int8_convrot.safetensors)\n\n**text_encoders**\n\n- [qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors)\n\n\n## Model Storage Location\n\n```\n📂 ComfyUI/\n├── 📂 models/\n│   ├── 📂 vae/\n│   │   ├── minimax_h3_video_vae_fp16.safetensors\n│   │   ├── minimax_h3_video_vae_fp16.safetensors\n│   │   └── minimax_h3_audio_vae_fp32.safetensors\n│   ├── 📂 diffusion_models/\n│   │   └── minimax_h3_ref2va_pruned_int8_convrot.safetensors\n│   └── 📂 text_encoders/\n│       └── qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors\n```\n\n## Report Issue\n\nNote: Please update ComfyUI first ([guide](https://docs.comfy.org/installation/update_comfyui)) and prepare required models. Desktop/Cloud updates follow stable releases, so some nightly-supported models may not be available yet.\n\n- Cannot run / runtime errors: [ComfyUI/issues](https://github.com/comfyanonymous/ComfyUI/issues)\n- UI / frontend issues: [ComfyUI_frontend/issues](https://github.com/Comfy-Org/ComfyUI_frontend/issues)\n- Workflow issues: [workflow_templates/issues](https://github.com/Comfy-Org/workflow_templates/issues)\n"
       ],
       "widgets_values_named": {
         "text": "## Model Links\n[🤗 Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3)\n\n**vae**\n\n- [minimax_h3_video_vae_fp16.safetensors](https://huggingface.co/speach1sdef178/MiniMax-H3/resolve/main/minimax_h3_video_vae_fp16.safetensors)\n- [minimax_h3_video_vae_fp16.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_video_vae_fp16.safetensors)\n- [minimax_h3_audio_vae_fp32.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_audio_vae_fp32.safetensors)\n\n**diffusion_models**\n\n- [minimax_h3_ref2va_pruned_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_ref2va_pruned_int8_convrot.safetensors)\n\n**text_encoders**\n\n- [qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors)\n\n\n## Model Storage Location\n\n```\n📂 ComfyUI/\n├── 📂 models/\n│   ├── 📂 vae/\n│   │   ├── minimax_h3_video_vae_fp16.safetensors\n│   │   ├── minimax_h3_video_vae_fp16.safetensors\n│   │   └── minimax_h3_audio_vae_fp32.safetensors\n│   ├── 📂 diffusion_models/\n│   │   └── minimax_h3_ref2va_pruned_int8_convrot.safetensors\n│   └── 📂 text_encoders/\n│       └── qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors\n```\n\n## Report Issue\n\nNote: Please update ComfyUI first ([guide](https://docs.comfy.org/installation/update_comfyui)) and prepare required models. Desktop/Cloud updates follow stable releases, so some nightly-supported models may not be available yet.\n\n- Cannot run / runtime errors: [ComfyUI/issues](https://github.com/comfyanonymous/ComfyUI/issues)\n- UI / frontend issues: [ComfyUI_frontend/issues](https://github.com/Comfy-Org/ComfyUI_frontend/issues)\n- Workflow issues: [workflow_templates/issues](https://github.com/Comfy-Org/workflow_templates/issues)\n"
@@ -855,55 +855,11 @@
         "Node name for S&R": "LoadImage"
       },
       "widgets_values": [
-        "19795657.jpg",
+        "sample_ref_image.png",
         "image"
       ],
       "widgets_values_named": {
-        "image": "19795657.jpg",
-        "upload": "image"
-      },
-      "color": "#2a363b",
-      "bgcolor": "#3f5159"
-    },
-    {
-      "id": 139,
-      "type": "LoadImage",
-      "pos": [
-        -345.7101153118359,
-        5744.184261080131
-      ],
-      "size": [
-        350,
-        340
-      ],
-      "flags": {},
-      "order": 11,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": []
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": null
-        }
-      ],
-      "title": "Last Frame Image (Optional)",
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.34.0",
-        "Node name for S&R": "LoadImage"
-      },
-      "widgets_values": [
-        "sadie_sink_riding_on_beach_sexy_sadie_sink_by_artsbyindianguy_dlr2omk-fullview.jpg",
-        "image"
-      ],
-      "widgets_values_named": {
-        "image": "sadie_sink_riding_on_beach_sexy_sadie_sink_by_artsbyindianguy_dlr2omk-fullview.jpg",
+        "image": "sample_ref_image.png",
         "upload": "image"
       },
       "color": "#2a363b",
@@ -1209,10 +1165,10 @@
         "Node name for S&R": "PrimitiveStringMultiline"
       },
       "widgets_values": [
-        "PRODUCTION QUALITY: Prestige 35mm Hollywood film stock, Panavision anamorphic lens. Cinematic Hong Kong nightclub bathroom — dark polished slate tiles, misted mirror reflections, vibrant cool-magenta neon tube accent light beneath the vanity, soft golden tungsten rimlight from above. Subsurface scattering on skin, authentic epidermal micro-sweat, zero 3D plastic look.\n\nCAMERA DIRECTIVE: STRICT THIRD-PERSON CINEMATIC OBSERVATION ONLY. ZERO FIRST-PERSON POV. ZERO HANDHELD PHONE JITTER. Smooth mechanical dolly and slow optical pushes.\n\nREFERENCE LOCK:\n- <Picture 1>: LIN. Exact face likeness. Fair porcelain Chinese skin, delicate bone structure, dark eyes, damp wisps of hair framing cheeks. Completely nude.\n- <Picture 2>: ARTWORK COMPOSITION & SCALE. She is TRULY TINY (3.2 inches tall), lying cradled in his massive open cupped palm. Delicate, vulnerable, erotic size disparity.\n\nSCALE & GEOMETRY LOCK:\n- Lin is 3.2 inches tall: her entire body fits within the hollow of Dean's massive left palm. She is fragile, tiny, and dwarfed by his hand.\n- Dean's LEFT HAND is the open cupped cradle held at mid-chest height. NO TABLES. NO DESKS.\n- Dean's RIGHT HAND enters with visible wrist/forearm: his index finger pad covers her clitoris, his thumb presses her breast. No floating limbs.\n- Real gravity: her soft breasts settle naturally to the sides when reclining; his touch depresses her flesh realistically.\n\nAUDIO MANDATE: Heavy club bass thumping through the walls and floor tiles in a slow heartbeat cadence. Intimate wet skin friction. Lin's breathy, fragile whimpers with a soft British accent, culminating in a single broken gasp of his name: \"Dean...\" Dean makes zero spoken sound, only heavy, slow exhales.\n\n————————————————————————————\nSHOT 1 [0s–5s] — DURATION: 5.0s — WIDE CINEMATIC TWO-SHOT: THE LIVING PALM CRADLE\nCamera: 35mm Anamorphic, third-person low-angle three-quarter profile. Deep moody shadows with magenta neon rim-lighting cutting across Dean's muscular frame.\n\nDean stands tall in the dim nightclub bathroom, broad-shouldered and shirtless. His massive, scarred left arm is raised to chest height, forearm horizontal, holding his colossal left hand open and gently cupped. \n\nLying nestled in the center of his massive palm is a completely nude, miniature Lin (<Picture 1>), exquisitely tiny at 3.2 inches tall. She reclines on her back against his palm creases, completely dwarfed by his hand. Her lean, athletic tomboy physique is pale and fair against his tanned skin; her medium-to-large breasts spill softly to either side under gravity.\n\nDean's right hand enters the frame from the right, with wrist and forearm fully attached. His colossal index fingertip, broad and warm, gently settles between her parted thighs, resting directly on her slick, wet clitoris.\n\nLin gasps, her tiny back arching softly into his palm, fair skin flushing pink. Her soft, breathy British voice breaks the bathroom silence: \"Dean... wait, I'm already so sensitive...\"\n\nTRANSITION: Smooth cinematic push-in to medium close.\n————————————————————————————\n\nSHOT 2 [5s–10s] — DURATION: 5.0s — MEDIUM CLOSE: THE TWO-HANDED RHYTHM\nCamera: 50mm Prime, high three-quarter angle looking down into the cupped palm. Soft magenta neon highlights glinting off glistening wet skin.\n\nLin lies completely vulnerable in the cradle of his left fingers. Her flat, toned stomach rises and falls with rapid, shallow breaths. \n\nDean's right index finger begins slow, deliberate circular friction directly over her glistening, swollen clitoris. The wet, tacky sound of skin-on-skin friction is immediate and rhythmic. \n\nSimultaneously, Dean's colossal right thumb descends from above and gently presses flat against her soft right breast. The soft breast tissue depresses deeply and realistically under his thumb pad. He holds the firm pressure for a beat, then lifts his thumb—her breast bounces and settles with natural soft-tissue rebound.\n\nLin's eyes squeeze shut in sensory overload. Her delicate hands clutch helplessly at the edge of his giant palm crease. Her thighs tremble and clamp inward around his circling finger. A ragged, breathy moan spills past her parted lips: \"Mmmh... God, Dean... both at the same time is too much...\"\n\nTRANSITION: Seamless cut to intimate macro.\n————————————————————————————\n\nSHOT 3 [10s–15s] — DURATION: 5.0s — MACRO CLOSE-UP: THE ESCALATION\nCamera: 100mm Macro Cinema Lens, shallow depth of field. Razor focus on her flushed face, heaving chest, and his active hands.\n\nDean accelerates the rhythm. His index finger circles faster, maintaining relentless downward pressure on her dripping clit. His right thumb repeatedly presses, strokes, and releases her right breast, causing continuous soft bounces.\n\nLin is completely lost to pleasure. Her fair porcelain neck and collarbones are flushed deep rose-pink, glistening with a light sheen of sweat. Her head lolls back against the fleshy heel of his thumb. \n\nHer hips begin bucking upward in involuntary, needy pulses against his massive fingertip. Her mouth falls open, breath catching in her throat, incapable of speaking sentences, letting out soft, broken, high-pitched whimpers that harmonize with the low pulse of the nightclub bass below.\n\nTRANSITION: Cut to the climactic wide-medium angle.\n————————————————————————————\n\nSHOT 4 [15s–20s] — DURATION: 5.0s — THE ORGASMIC BOUNCE & LINGERING AFTERMATH (NO BLACKOUT)\nCamera: 50mm Master Prime, locked-off third-person medium angle. Fully illuminated, rock-steady hold throughout.\n\nTHE CLIMAX (15s–17s):\nDean delivers the final decisive movement: his right index finger presses firmly down in a deep, circular grind against her clit while his right thumb compresses and snaps softly off her right breast.\n\nLin hits an explosive, full-body orgasm. Her back arches sharply off his palm, her flat stomach clenching in violent ripples. \nTHE DUAL BREAST BOUNCE: Both of her medium-to-large breasts bounce violently and simultaneously—the right one from the snap-release of his thumb, the left one from the violent shudder of her arching body. They jiggle in lingering, quivering shockwaves. \nHer mouth opens wide on a ragged, breathless, broken cry of bliss: \"...Dean!\"\n\nTHE LINGERING AFTERMATH (17s–20s):\nLin collapses limp, totally spent, melting flat into the hollow of his warm left palm. Her chest heaves in deep, shuddering panting. Her limbs rest heavy and splayed in his hand.\n\nDean lifts his right hand away slowly, revealing a glistening strand of moisture that pulls from her clit and snaps softly. His thumb gently strokes her flushed cheek with tender, protective reverence.\n\nTHE FRAME HOLDS FULLY LIT: Magenta neon washes over her tiny, glowing, exhausted body cradled in his hand. The club bass thumps softly as her chest flutters until the very last frame. ZERO CUT TO BLACK.\n————————————————————————————\n"
+        ""
       ],
       "widgets_values_named": {
-        "value": "PRODUCTION QUALITY: Prestige 35mm Hollywood film stock, Panavision anamorphic lens. Cinematic Hong Kong nightclub bathroom — dark polished slate tiles, misted mirror reflections, vibrant cool-magenta neon tube accent light beneath the vanity, soft golden tungsten rimlight from above. Subsurface scattering on skin, authentic epidermal micro-sweat, zero 3D plastic look.\n\nCAMERA DIRECTIVE: STRICT THIRD-PERSON CINEMATIC OBSERVATION ONLY. ZERO FIRST-PERSON POV. ZERO HANDHELD PHONE JITTER. Smooth mechanical dolly and slow optical pushes.\n\nREFERENCE LOCK:\n- <Picture 1>: LIN. Exact face likeness. Fair porcelain Chinese skin, delicate bone structure, dark eyes, damp wisps of hair framing cheeks. Completely nude.\n- <Picture 2>: ARTWORK COMPOSITION & SCALE. She is TRULY TINY (3.2 inches tall), lying cradled in his massive open cupped palm. Delicate, vulnerable, erotic size disparity.\n\nSCALE & GEOMETRY LOCK:\n- Lin is 3.2 inches tall: her entire body fits within the hollow of Dean's massive left palm. She is fragile, tiny, and dwarfed by his hand.\n- Dean's LEFT HAND is the open cupped cradle held at mid-chest height. NO TABLES. NO DESKS.\n- Dean's RIGHT HAND enters with visible wrist/forearm: his index finger pad covers her clitoris, his thumb presses her breast. No floating limbs.\n- Real gravity: her soft breasts settle naturally to the sides when reclining; his touch depresses her flesh realistically.\n\nAUDIO MANDATE: Heavy club bass thumping through the walls and floor tiles in a slow heartbeat cadence. Intimate wet skin friction. Lin's breathy, fragile whimpers with a soft British accent, culminating in a single broken gasp of his name: \"Dean...\" Dean makes zero spoken sound, only heavy, slow exhales.\n\n————————————————————————————\nSHOT 1 [0s–5s] — DURATION: 5.0s — WIDE CINEMATIC TWO-SHOT: THE LIVING PALM CRADLE\nCamera: 35mm Anamorphic, third-person low-angle three-quarter profile. Deep moody shadows with magenta neon rim-lighting cutting across Dean's muscular frame.\n\nDean stands tall in the dim nightclub bathroom, broad-shouldered and shirtless. His massive, scarred left arm is raised to chest height, forearm horizontal, holding his colossal left hand open and gently cupped. \n\nLying nestled in the center of his massive palm is a completely nude, miniature Lin (<Picture 1>), exquisitely tiny at 3.2 inches tall. She reclines on her back against his palm creases, completely dwarfed by his hand. Her lean, athletic tomboy physique is pale and fair against his tanned skin; her medium-to-large breasts spill softly to either side under gravity.\n\nDean's right hand enters the frame from the right, with wrist and forearm fully attached. His colossal index fingertip, broad and warm, gently settles between her parted thighs, resting directly on her slick, wet clitoris.\n\nLin gasps, her tiny back arching softly into his palm, fair skin flushing pink. Her soft, breathy British voice breaks the bathroom silence: \"Dean... wait, I'm already so sensitive...\"\n\nTRANSITION: Smooth cinematic push-in to medium close.\n————————————————————————————\n\nSHOT 2 [5s–10s] — DURATION: 5.0s — MEDIUM CLOSE: THE TWO-HANDED RHYTHM\nCamera: 50mm Prime, high three-quarter angle looking down into the cupped palm. Soft magenta neon highlights glinting off glistening wet skin.\n\nLin lies completely vulnerable in the cradle of his left fingers. Her flat, toned stomach rises and falls with rapid, shallow breaths. \n\nDean's right index finger begins slow, deliberate circular friction directly over her glistening, swollen clitoris. The wet, tacky sound of skin-on-skin friction is immediate and rhythmic. \n\nSimultaneously, Dean's colossal right thumb descends from above and gently presses flat against her soft right breast. The soft breast tissue depresses deeply and realistically under his thumb pad. He holds the firm pressure for a beat, then lifts his thumb—her breast bounces and settles with natural soft-tissue rebound.\n\nLin's eyes squeeze shut in sensory overload. Her delicate hands clutch helplessly at the edge of his giant palm crease. Her thighs tremble and clamp inward around his circling finger. A ragged, breathy moan spills past her parted lips: \"Mmmh... God, Dean... both at the same time is too much...\"\n\nTRANSITION: Seamless cut to intimate macro.\n————————————————————————————\n\nSHOT 3 [10s–15s] — DURATION: 5.0s — MACRO CLOSE-UP: THE ESCALATION\nCamera: 100mm Macro Cinema Lens, shallow depth of field. Razor focus on her flushed face, heaving chest, and his active hands.\n\nDean accelerates the rhythm. His index finger circles faster, maintaining relentless downward pressure on her dripping clit. His right thumb repeatedly presses, strokes, and releases her right breast, causing continuous soft bounces.\n\nLin is completely lost to pleasure. Her fair porcelain neck and collarbones are flushed deep rose-pink, glistening with a light sheen of sweat. Her head lolls back against the fleshy heel of his thumb. \n\nHer hips begin bucking upward in involuntary, needy pulses against his massive fingertip. Her mouth falls open, breath catching in her throat, incapable of speaking sentences, letting out soft, broken, high-pitched whimpers that harmonize with the low pulse of the nightclub bass below.\n\nTRANSITION: Cut to the climactic wide-medium angle.\n————————————————————————————\n\nSHOT 4 [15s–20s] — DURATION: 5.0s — THE ORGASMIC BOUNCE & LINGERING AFTERMATH (NO BLACKOUT)\nCamera: 50mm Master Prime, locked-off third-person medium angle. Fully illuminated, rock-steady hold throughout.\n\nTHE CLIMAX (15s–17s):\nDean delivers the final decisive movement: his right index finger presses firmly down in a deep, circular grind against her clit while his right thumb compresses and snaps softly off her right breast.\n\nLin hits an explosive, full-body orgasm. Her back arches sharply off his palm, her flat stomach clenching in violent ripples. \nTHE DUAL BREAST BOUNCE: Both of her medium-to-large breasts bounce violently and simultaneously—the right one from the snap-release of his thumb, the left one from the violent shudder of her arching body. They jiggle in lingering, quivering shockwaves. \nHer mouth opens wide on a ragged, breathless, broken cry of bliss: \"...Dean!\"\n\nTHE LINGERING AFTERMATH (17s–20s):\nLin collapses limp, totally spent, melting flat into the hollow of his warm left palm. Her chest heaves in deep, shuddering panting. Her limbs rest heavy and splayed in his hand.\n\nDean lifts his right hand away slowly, revealing a glistening strand of moisture that pulls from her clit and snaps softly. His thumb gently strokes her flushed cheek with tender, protective reverence.\n\nTHE FRAME HOLDS FULLY LIT: Magenta neon washes over her tiny, glowing, exhausted body cradled in his hand. The club bass thumps softly as her chest flutters until the very last frame. ZERO CUT TO BLACK.\n————————————————————————————\n"
+        "value": ""
       },
       "color": "#322",
       "bgcolor": "#533"
@@ -1269,92 +1225,11 @@
         "start_percent": 0.2,
         "end_percent": 0.85,
         "max_consecutive_hits": 1,
-        "temporal_guard": true
+        "temporal_guard": true,
+        "forecast_residual": true
       },
       "color": "#242",
       "bgcolor": "#363"
-    },
-    {
-      "id": 157,
-      "type": "LoadImage",
-      "pos": [
-        59.89251899224826,
-        5778.477854098131
-      ],
-      "size": [
-        282.798828125,
-        314
-      ],
-      "flags": {},
-      "order": 18,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": []
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": []
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.35.0",
-        "Node name for S&R": "LoadImage"
-      },
-      "widgets_values": [
-        "gemini_generated_image_4wlu0v4wlu0v4wlu_by_gts59io_dlj5d42-fullview.jpg",
-        "image"
-      ],
-      "widgets_values_named": {
-        "image": "gemini_generated_image_4wlu0v4wlu0v4wlu_by_gts59io_dlj5d42-fullview.jpg",
-        "upload": "image"
-      }
-    },
-    {
-      "id": 158,
-      "type": "LoadImage",
-      "pos": [
-        524.3799596280022,
-        5674.6931851757545
-      ],
-      "size": [
-        282.798828125,
-        314
-      ],
-      "flags": {},
-      "order": 19,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": []
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": []
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.35.0",
-        "Node name for S&R": "LoadImage"
-      },
-      "widgets_values": [
-        "Giant-Hunting-14.jpg",
-        "image"
-      ],
-      "widgets_values_named": {
-        "image": "Giant-Hunting-14.jpg",
-        "upload": "image"
-      }
     },
     {
       "id": 160,
@@ -1438,6 +1313,11 @@
           "type": "LATENT",
           "shape": 7,
           "link": 354
+        },
+        {
+          "name": "preset",
+          "type": "H3_UPSCALE_PRESET",
+          "link": 359
         }
       ],
       "outputs": [
@@ -1646,7 +1526,12 @@
         "video/MiniMax_H3_I2V_ReCaVSR_Master",
         "auto",
         "auto"
-      ]
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "video/MiniMax_H3_I2V_ReCaVSR_Master",
+        "format": "auto",
+        "codec": "auto"
+      }
     },
     {
       "id": 181,
@@ -1673,6 +1558,52 @@
       ],
       "color": "#222",
       "bgcolor": "#000"
+    },
+    {
+      "id": 192,
+      "type": "H3UpscalePreApproval",
+      "pos": [
+        -2180,
+        5645
+      ],
+      "size": [
+        590,
+        265
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "preset",
+          "type": "H3_UPSCALE_PRESET",
+          "links": [
+            359
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "status",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 1
+        }
+      ],
+      "title": "⚡ Stage 2 Upscale & Pre-Approve Mode (2x / 4x / On Approval)",
+      "properties": {
+        "Node name for S&R": "H3UpscalePreApproval"
+      },
+      "widgets_values": [
+        "Ask Approval in UI (Wait After 768p Draft)",
+        2.0
+      ],
+      "widgets_values_named": {
+        "upscale_mode": "Ask Approval in UI (Wait After 768p Draft)",
+        "custom_scale": 2.0
+      },
+      "color": "#78350f",
+      "bgcolor": "#451a03"
     }
   ],
   "links": [
@@ -1741,6 +1672,22 @@
       "AUDIO"
     ],
     [
+      260,
+      130,
+      0,
+      92,
+      0,
+      "VIDEO"
+    ],
+    [
+      261,
+      132,
+      0,
+      131,
+      0,
+      "FLOAT"
+    ],
+    [
       270,
       136,
       0,
@@ -1755,6 +1702,54 @@
       125,
       4,
       "LATENT"
+    ],
+    [
+      272,
+      128,
+      0,
+      136,
+      0,
+      "CLIP"
+    ],
+    [
+      273,
+      160,
+      0,
+      136,
+      1,
+      "VAE"
+    ],
+    [
+      275,
+      131,
+      1,
+      136,
+      7,
+      "INT"
+    ],
+    [
+      276,
+      115,
+      0,
+      136,
+      5,
+      "INT"
+    ],
+    [
+      277,
+      115,
+      1,
+      136,
+      6,
+      "INT"
+    ],
+    [
+      279,
+      138,
+      0,
+      136,
+      4,
+      "STRING"
     ],
     [
       280,
@@ -1813,76 +1808,12 @@
       "MODEL"
     ],
     [
-      260,
-      130,
-      0,
-      92,
-      0,
-      "VIDEO"
-    ],
-    [
-      261,
-      132,
-      0,
-      131,
-      0,
-      "FLOAT"
-    ],
-    [
-      272,
-      128,
-      0,
-      136,
-      0,
-      "CLIP"
-    ],
-    [
-      273,
-      160,
-      0,
-      136,
-      1,
-      "VAE"
-    ],
-    [
       350,
       137,
       0,
       136,
       2,
       "IMAGE"
-    ],
-    [
-      279,
-      138,
-      0,
-      136,
-      4,
-      "STRING"
-    ],
-    [
-      276,
-      115,
-      0,
-      136,
-      5,
-      "INT"
-    ],
-    [
-      277,
-      115,
-      1,
-      136,
-      6,
-      "INT"
-    ],
-    [
-      275,
-      131,
-      1,
-      136,
-      7,
-      "INT"
     ],
     [
       351,
@@ -1947,6 +1878,14 @@
       180,
       0,
       "VIDEO"
+    ],
+    [
+      359,
+      192,
+      0,
+      169,
+      4,
+      "H3_UPSCALE_PRESET"
     ]
   ],
   "groups": [

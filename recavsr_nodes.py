@@ -1,8 +1,10 @@
+import gc
 import logging
 import os
 import time
 import uuid
 
+import numpy as np
 import torch
 from tqdm import tqdm
 
@@ -123,8 +125,17 @@ class ReCaVSRUpscale(io.ComfyNode):
         else:  # a VIDEO made from components: its frames are already in memory
             parts = video.get_components()
             source = ArrayFrames(parts.images, parts.frame_rate)
-            if parts.audio is not None:
-                source.audio = (parts.audio["waveform"][0].float().numpy(), parts.audio["sample_rate"])
+            if parts.audio is not None and isinstance(parts.audio, dict) and "waveform" in parts.audio:
+                wf = parts.audio["waveform"]
+                if hasattr(wf, "detach"):
+                    wf = wf.detach().cpu().float().numpy()
+                wf = np.asarray(wf, dtype=np.float32)
+                if wf.ndim == 3:
+                    wf = wf[0]
+                elif wf.ndim == 1:
+                    wf = wf[None, :]
+                if wf.ndim == 2 and wf.shape[0] > 0 and wf.shape[1] > 0:
+                    source.audio = (wf, int(parts.audio["sample_rate"]))
         total = source.total
         in_h, in_w = source.get(0, 1).shape[1:3]
         size = scaled_size(in_h, in_w, scale)
@@ -133,9 +144,20 @@ class ReCaVSRUpscale(io.ComfyNode):
         log.info("ReCaVSR: %d frames %dx%d -> %dx%d (x%g; model size %dx%d), %d blocks, %s transformer, %s kernels, "
                  "decoder %s, colour fix %s, encoder %s%s", total, in_w, in_h, size[1], size[0], scale, width, height,
                  len(blocks), model.precision, kernels, decoder, color_fix, encoder, ", attention history in RAM" if kv_offload else "")
+        # Evict any Stage 1 comfy-aimdo dynamic VRAM models left resident on the card before sizing
+        # and running Stage 2 activations, because ComfyUI's dynamic load_models_gpu skips eviction.
+        dev = model.transformer.load_device
+        comfy.model_management.unload_all_models()
+        gc.collect()
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        comfy.model_management.soft_empty_cache()
+        total_mem = comfy.model_management.get_total_memory(dev)
+        free_mem = comfy.model_management.get_free_memory(dev)
+        log.info("ReCaVSR: GPU VRAM free %.1f / %.1f GiB after unloading prior models", free_mem / 2**30, total_mem / 2**30)
         # fit the activations to the card: whole blocks when they fit, else the input projection a few frames at a time
         # (one bf16 rounding step from the whole-block result), else the attention history in RAM too
-        card = comfy.model_management.get_total_memory(model.transformer.load_device) * 0.85
+        card = min(total_mem * 0.85, free_mem * 0.88)
         lq_chunk = activation_bytes(height, width, kv_offload) > card
         if lq_chunk and not kv_offload and activation_bytes(height, width, False, True) > card:
             kv_offload = True

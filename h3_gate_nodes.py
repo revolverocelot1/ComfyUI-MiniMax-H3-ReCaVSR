@@ -758,7 +758,7 @@ class GetImageSizePlus:
 import time
 import json
 
-_APPROVAL_STATE = {}  # node_id -> {"status": "waiting" | "approve" | "approve_2x" | "approve_4x" | "stop"}
+_APPROVAL_STATE = {}  # node_id -> {"status": "waiting" | "approve" | "approve_2x" | "approve_4x" | "approve_custom" | "stop", "scale": float}
 
 def _register_approval_routes():
     try:
@@ -778,11 +778,18 @@ def _register_approval_routes():
                 data = {}
             node_id = str(data.get("node_id", "latest"))
             decision = str(data.get("decision", "approve"))
-            _APPROVAL_STATE[node_id] = {"status": decision}
-            _APPROVAL_STATE["latest"] = {"status": decision}
+            scale_val = data.get("scale")
+            entry = {"status": decision}
+            if scale_val is not None:
+                try:
+                    entry["scale"] = float(scale_val)
+                except (TypeError, ValueError):
+                    pass
+            _APPROVAL_STATE[node_id] = dict(entry)
+            _APPROVAL_STATE["latest"] = dict(entry)
             for k in list(_APPROVAL_STATE.keys()):
                 if _APPROVAL_STATE[k].get("status") == "waiting":
-                    _APPROVAL_STATE[k]["status"] = decision
+                    _APPROVAL_STATE[k] = dict(entry)
             print(f"[H3UpscaleApprovalGate] User decision received for node {node_id}: {decision}", flush=True)
             return web.json_response({"ok": True, "node_id": node_id, "decision": decision})
 
@@ -796,6 +803,80 @@ def _register_approval_routes():
         print(f"[ComfyUI-H3-X2-Detailed] Note: Could not register PromptServer routes at import time ({e}).", flush=True)
 
 _register_approval_routes()
+
+
+class H3UpscalePreApproval:
+    """
+    Quick Stage 2 Upscale & Pre-Approval Control designed to sit directly beside
+    Text Prompt and Resolution Selector so users can pre-select 2x, 4x, Custom Scale,
+    Ask Approval, or Draft Only before queueing without scrolling to Stage 2.
+    """
+
+    PRESET_MODES = [
+        "Ask Approval in UI (Wait After 768p Draft)",
+        "Pre-Approve 2x Upscale (Auto 2K — No Pause)",
+        "Pre-Approve 4x Upscale (Auto 4K — No Pause)",
+        "Pre-Approve Custom Scale (Auto — No Pause)",
+        "Draft Only (Stop After 768p — No Upscale)",
+    ]
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "upscale_mode": (
+                    cls.PRESET_MODES,
+                    {"default": "Ask Approval in UI (Wait After 768p Draft)"},
+                ),
+                "custom_scale": (
+                    "FLOAT",
+                    {
+                        "default": 2.0,
+                        "min": 1.0,
+                        "max": 8.0,
+                        "step": 0.25,
+                        "tooltip": "Scale factor used when 'Pre-Approve Custom Scale' is turned on (or default custom scale when pausing).",
+                    },
+                ),
+            }
+        }
+
+    RETURN_TYPES = ("H3_UPSCALE_PRESET", "STRING")
+    RETURN_NAMES = ("preset", "status")
+    FUNCTION = "build_preset"
+    CATEGORY = "MiniMax H3/Upscale Gate"
+
+    def build_preset(
+        self,
+        upscale_mode="Ask Approval in UI (Wait After 768p Draft)",
+        custom_scale=2.0,
+    ):
+        safe_custom = max(1.0, min(8.0, float(custom_scale)))
+        mode_str = str(upscale_mode)
+
+        if mode_str.startswith("Pre-Approve 2x"):
+            action, scale_float = "auto", 2.0
+            summary = "Pre-Approved: Auto-Upscale 2x (2K)"
+        elif mode_str.startswith("Pre-Approve 4x"):
+            action, scale_float = "auto", 4.0
+            summary = "Pre-Approved: Auto-Upscale 4x (4K)"
+        elif mode_str.startswith("Pre-Approve Custom"):
+            action, scale_float = "auto", safe_custom
+            summary = f"Pre-Approved: Auto-Upscale {safe_custom:g}x"
+        elif mode_str.startswith("Draft Only"):
+            action, scale_float = "stop", 1.0
+            summary = "Draft Only: Stop After 768p"
+        else:
+            action, scale_float = "ask", safe_custom
+            summary = f"On Approval: Pause After 768p Draft ({safe_custom:g}x default)"
+
+        preset = {
+            "action": action,
+            "scale_float": float(scale_float),
+            "mode_label": mode_str,
+            "summary": summary,
+        }
+        return (preset, summary)
 
 
 class H3UpscaleApprovalGate:
@@ -828,6 +909,7 @@ class H3UpscaleApprovalGate:
                 "images": ("IMAGE",),
                 "audio": ("AUDIO",),
                 "latent": ("LATENT",),
+                "preset": ("H3_UPSCALE_PRESET",),
             },
             "hidden": {
                 "unique_id": "UNIQUE_ID",
@@ -840,7 +922,17 @@ class H3UpscaleApprovalGate:
     CATEGORY = "MiniMax H3/Upscale Gate"
 
     @classmethod
-    def IS_CHANGED(cls, video, approval_mode, upscale_factor, images=None, audio=None, latent=None, unique_id=None):
+    def IS_CHANGED(
+        cls,
+        video,
+        approval_mode,
+        upscale_factor,
+        images=None,
+        audio=None,
+        latent=None,
+        preset=None,
+        unique_id=None,
+    ):
         # Always re-evaluate when interactive approval or stop mode is selected
         return float("nan")
 
@@ -857,21 +949,50 @@ class H3UpscaleApprovalGate:
         model_management.interrupt_current_processing(True)
         raise RuntimeError("Stopped after Stage 1 768p draft by user choice.")
 
-    def gate(self, video, approval_mode="Ask Approval in UI (Wait Indefinitely - No Timer)",
-             upscale_factor="2x Upscale (1440p / 2K)", images=None, audio=None, latent=None, unique_id=None):
+    def gate(
+        self,
+        video,
+        approval_mode="Ask Approval in UI (Wait Indefinitely - No Timer)",
+        upscale_factor="2x Upscale (1440p / 2K)",
+        images=None,
+        audio=None,
+        latent=None,
+        preset=None,
+        unique_id=None,
+    ):
         _register_approval_routes()
         node_id = str(unique_id) if unique_id is not None else "latest"
 
-        # Default scale factor from dropdown widget
+        # Default scale factor from dropdown widget, optionally overridden by connected Pre-Approval preset
         scale_float = 4.0 if str(upscale_factor).startswith("4x") else 2.0
-
         mode_str = str(approval_mode)
+        if isinstance(preset, dict):
+            action = str(preset.get("action", "ask"))
+            if preset.get("scale_float") is not None:
+                scale_float = max(1.0, min(8.0, float(preset["scale_float"])))
+            if action == "stop":
+                mode_str = "Stop After 768p Draft Only (Do Not Upscale)"
+            elif action == "auto":
+                mode_str = "Auto-Upscale Immediately (No Pause)"
+            elif action == "ask":
+                mode_str = "Ask Approval in UI (Wait Indefinitely - No Timer)"
+            print(
+                f"[H3UpscaleApprovalGate] Pre-Approval Control active: {preset.get('summary', mode_str)}",
+                flush=True,
+            )
+
         if mode_str.startswith("Stop After"):
             self._stop_after_draft(node_id, "Mode is set to 'Stop After 768p Draft Only'")
 
+        elif mode_str.startswith("Auto-Upscale"):
+            print(
+                f"[H3UpscaleApprovalGate] Pre-Approved ({scale_float:g}x)! Auto-upscaling Stage 2 immediately (No Pause).",
+                flush=True,
+            )
+
         elif mode_str.startswith("Ask Approval"):
-            _APPROVAL_STATE[node_id] = {"status": "waiting"}
-            _APPROVAL_STATE["latest"] = {"status": "waiting"}
+            _APPROVAL_STATE[node_id] = {"status": "waiting", "scale": scale_float}
+            _APPROVAL_STATE["latest"] = {"status": "waiting", "scale": scale_float}
             print(
                 f"[H3UpscaleApprovalGate] Stage 1 (768p Draft) is saved and visible in UI! "
                 f"Waiting indefinitely (NO TIMER) for user approval on node #{node_id}...",
@@ -899,15 +1020,18 @@ class H3UpscaleApprovalGate:
                         raise model_management.InterruptProcessingException()
                     break
 
-                st = _APPROVAL_STATE.get(node_id, {}).get("status", "waiting")
-                if st == "waiting":
-                    st = _APPROVAL_STATE.get("latest", {}).get("status", "waiting")
+                state_entry = _APPROVAL_STATE.get(node_id) or {}
+                if state_entry.get("status", "waiting") == "waiting":
+                    state_entry = _APPROVAL_STATE.get("latest") or {}
+                st = state_entry.get("status", "waiting")
 
-                if st in ("approve", "approve_2x", "approve_4x"):
+                if st in ("approve", "approve_2x", "approve_4x", "approve_custom"):
                     if st == "approve_2x":
                         scale_float = 2.0
                     elif st == "approve_4x":
                         scale_float = 4.0
+                    elif st == "approve_custom" and state_entry.get("scale") is not None:
+                        scale_float = max(1.0, min(8.0, float(state_entry["scale"])))
                     _APPROVAL_STATE.pop(node_id, None)
                     _APPROVAL_STATE.pop("latest", None)
                     try:
@@ -919,7 +1043,7 @@ class H3UpscaleApprovalGate:
                             )
                     except Exception:
                         pass
-                    print(f"[H3UpscaleApprovalGate] Approved! Proceeding to Stage 2 ({scale_float}x upscale).", flush=True)
+                    print(f"[H3UpscaleApprovalGate] Approved! Proceeding to Stage 2 ({scale_float:g}x upscale).", flush=True)
                     break
 
                 elif st == "stop":
@@ -947,6 +1071,19 @@ class H3UpscaleApprovalGate:
         else:
             target_width = max(32, int(round((base_w * scale_float) / 32.0) * 32))
             target_height = max(32, int(round((base_h * scale_float) / 32.0) * 32))
+
+        # Evict Stage 1 comfy-aimdo dynamic VRAM models (diffusion UNet, Qwen3-VL, VideoVAE)
+        # so Stage 2 (ReCaVSR / Open-H3-2K) starts with clean GPU memory instead of OOMing
+        # against un-evicted dynamic VMM slabs.
+        try:
+            model_management.unload_all_models()
+        except Exception as e:
+            print(f"[H3UpscaleApprovalGate] Warning unloading Stage 1 models: {e}", flush=True)
+        _empty_cuda()
+        try:
+            model_management.soft_empty_cache()
+        except Exception:
+            pass
 
         return (video, images, audio, latent, float(scale_float), int(target_width), int(target_height))
 
@@ -1179,6 +1316,7 @@ NODE_CLASS_MAPPINGS = {
     "MiniMaxH3X2DetailedUpscale": MiniMaxH3X2DetailedUpscale,
     "H3SaveFrozenLatentV4": H3SaveFrozenLatentV4,
     "GetImageSizePlus": GetImageSizePlus,
+    "H3UpscalePreApproval": H3UpscalePreApproval,
     "H3UpscaleApprovalGate": H3UpscaleApprovalGate,
     "OpenH3ICDraft": OpenH3ICDraft,
     "OpenH3ICPrompt": OpenH3ICPrompt,
@@ -1190,6 +1328,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "MiniMaxH3X2DetailedUpscale": "MiniMax H3 VAE 2X (Detailed Upscale)",
     "H3SaveFrozenLatentV4": "MiniMax H3 Save Frozen Latent V4",
     "GetImageSizePlus": "Get Image Size Plus",
+    "H3UpscalePreApproval": "⚡ Stage 2 Upscale & Pre-Approve Mode",
     "H3UpscaleApprovalGate": "⚡ H3 Stage 1 -> Stage 2 Approval Gate & 2x/4x Option (No Timer)",
     "OpenH3ICDraft": "Open-H3 IC · Prepare Draft (124f / 24fps)",
     "OpenH3ICPrompt": "Open-H3 IC · Official Prompt",

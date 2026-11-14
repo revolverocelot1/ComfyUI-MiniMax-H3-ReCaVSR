@@ -100,13 +100,23 @@ class Writer:
 
     def __init__(self, path, width, height, fps, encoder, device, audio=None, chunk=4, slots=3):
         codec, options = ENCODERS[encoder]
+        if not isinstance(fps, Fraction):
+            fps = Fraction(fps).limit_denominator(1001)
         self.container = av.open(path, "w")
         self.stream = self.container.add_stream(codec, rate=fps, options=dict(options))
         self.stream.width, self.stream.height, self.stream.pix_fmt = width, height, "yuv420p"
         # every stream before the first packet: the header is written then. audio = (samples [C, S] float32, rate)
-        self.audio = audio
         if audio is not None:
-            self.audio_stream = self.container.add_stream("aac", rate=audio[1], layout="stereo" if audio[0].shape[0] > 1 else "mono")
+            samples, rate = audio
+            if getattr(samples, "ndim", 0) == 1:
+                samples = samples[None, :]
+            if getattr(samples, "ndim", 0) == 2 and samples.shape[0] > 0 and samples.shape[1] > 0:
+                audio = (np.ascontiguousarray(samples[:2], dtype=np.float32), int(rate))
+            else:
+                audio = None
+        self.audio = audio
+        if self.audio is not None:
+            self.audio_stream = self.container.add_stream("aac", rate=self.audio[1], layout="stereo" if self.audio[0].shape[0] > 1 else "mono")
         self.cuda = device.type == "cuda"
         self.slots = [torch.empty((chunk, height, width, 3), dtype=torch.uint8, pin_memory=self.cuda) for _ in range(slots)]
         self.free, self.work = queue.Queue(), queue.Queue()
@@ -161,6 +171,9 @@ class Writer:
             out = self.audio_stream
             frame = av.AudioFrame.from_ndarray(np.ascontiguousarray(samples[:2], dtype=np.float32), format="fltp", layout=out.layout.name)
             frame.sample_rate = rate
-            self.container.mux(out.encode(frame))
-            self.container.mux(out.encode())
+            frame.pts = 0
+            for packet in out.encode(frame):
+                self.container.mux(packet)
+            for packet in out.encode():
+                self.container.mux(packet)
         self.container.close()
