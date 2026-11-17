@@ -408,6 +408,34 @@ app.registerExtension({
             return;
         }
 
+        if (nodeData.name === "ReCaVSRLoader") {
+            const healLoader = (node) => {
+                const w = getWidget(node, "transformer");
+                if (!w) return;
+                const bad = new Set(["flashdecoder.safetensors", "prompt.safetensors", "vae.safetensors"]);
+                if (bad.has(String(w.value || ""))) {
+                    const opts = Array.isArray(w.options?.values) ? w.options.values : [];
+                    w.value = opts.includes("transformer_int8_convrot.safetensors")
+                        ? "transformer_int8_convrot.safetensors"
+                        : opts.find((v) => !bad.has(v)) || "transformer_int8_convrot.safetensors";
+                    node.setDirtyCanvas?.(true, true);
+                }
+            };
+            const onNodeCreated = nodeType.prototype.onNodeCreated;
+            nodeType.prototype.onNodeCreated = function () {
+                const r = onNodeCreated ? onNodeCreated.apply(this, arguments) : undefined;
+                healLoader(this);
+                return r;
+            };
+            const onConfigure = nodeType.prototype.onConfigure;
+            nodeType.prototype.onConfigure = function () {
+                const r = onConfigure ? onConfigure.apply(this, arguments) : undefined;
+                setTimeout(() => healLoader(this), 0);
+                return r;
+            };
+            return;
+        }
+
         if (nodeData.name !== "H3UpscaleApprovalGate") return;
 
         const onNodeCreated = nodeType.prototype.onNodeCreated;

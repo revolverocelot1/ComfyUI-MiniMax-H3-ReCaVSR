@@ -28,8 +28,16 @@ LQ_CHUNK_FRAMES = 4
 folder_paths.add_model_folder_path(FOLDER, os.path.join(folder_paths.models_dir, FOLDER))
 
 
+_NON_TRANSFORMER_FILES = {"flashdecoder.safetensors", "prompt.safetensors", "vae.safetensors"}
+
+
+def _is_transformer_file(name: str) -> bool:
+    base = os.path.basename(name)
+    return base.endswith(".safetensors") and base not in _NON_TRANSFORMER_FILES
+
+
 def _files():
-    found = [f for f in folder_paths.get_filename_list(FOLDER) if f.endswith(".safetensors")]
+    found = [f for f in folder_paths.get_filename_list(FOLDER) if _is_transformer_file(f)]
     folder_dirs = []
     if hasattr(folder_paths, "get_folder_paths"):
         folder_dirs.extend(folder_paths.get_folder_paths(FOLDER) or [])
@@ -38,7 +46,7 @@ def _files():
         if os.path.isdir(d):
             try:
                 for f in os.listdir(d):
-                    if f.endswith(".safetensors") and f not in found:
+                    if _is_transformer_file(f) and f not in found:
                         found.append(f)
             except Exception:
                 pass
@@ -74,6 +82,14 @@ class ReCaVSRLoader(io.ComfyNode):
 
     @classmethod
     def execute(cls, transformer) -> io.NodeOutput:
+        if os.path.basename(str(transformer)) in _NON_TRANSFORMER_FILES:
+            fallback = "transformer_int8_convrot.safetensors"
+            recavsr_dir = os.path.join(folder_paths.models_dir, FOLDER)
+            if not os.path.isfile(os.path.join(recavsr_dir, fallback)) and os.path.isfile(os.path.join(recavsr_dir, "transformer.safetensors")):
+                fallback = "transformer.safetensors"
+            log.warning("ReCaVSR: '%s' is not a transformer checkpoint; auto-selecting '%s' instead", transformer, fallback)
+            transformer = fallback
+
         path = folder_paths.get_full_path(FOLDER, transformer) if hasattr(folder_paths, "get_full_path") else None
         if not path or not os.path.isfile(path):
             folder_dirs = []
