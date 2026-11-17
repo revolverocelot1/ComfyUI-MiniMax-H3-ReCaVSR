@@ -29,13 +29,33 @@ folder_paths.add_model_folder_path(FOLDER, os.path.join(folder_paths.models_dir,
 
 
 def _files():
-    return [f for f in folder_paths.get_filename_list(FOLDER) if f.endswith(".safetensors")]
+    found = [f for f in folder_paths.get_filename_list(FOLDER) if f.endswith(".safetensors")]
+    folder_dirs = []
+    if hasattr(folder_paths, "get_folder_paths"):
+        folder_dirs.extend(folder_paths.get_folder_paths(FOLDER) or [])
+    folder_dirs.append(os.path.join(folder_paths.models_dir, FOLDER))
+    for d in folder_dirs:
+        if os.path.isdir(d):
+            try:
+                for f in os.listdir(d):
+                    if f.endswith(".safetensors") and f not in found:
+                        found.append(f)
+            except Exception:
+                pass
+    known = ["transformer_int8_convrot.safetensors", "transformer.safetensors"]
+    for k in known:
+        if k not in found:
+            found.append(k)
+    return found
 
 
 class ReCaVSRLoader(io.ComfyNode):
     @classmethod
     def define_schema(cls):
         files = _files()
+        default_file = "transformer_int8_convrot.safetensors" if "transformer_int8_convrot.safetensors" in files else (
+            "transformer.safetensors" if "transformer.safetensors" in files else (files[0] if files else None)
+        )
         return io.Schema(
             node_id="ReCaVSRLoader",
             display_name="ReCaVSR Model Loader",
@@ -43,7 +63,7 @@ class ReCaVSRLoader(io.ComfyNode):
             description="Loads ReCaVSR (the Wan2.2-based one-step streaming video super-resolution transformer) with its "
                         "prompt embedding and FlashDecoder from models/recavsr.",
             inputs=[
-                io.Combo.Input("transformer", options=files, default="transformer.safetensors" if "transformer.safetensors" in files else None,
+                io.Combo.Input("transformer", options=files, default=default_file,
                                tooltip="kopper/ReCaVSR transformer.safetensors (bf16), or the int8 ConvRot file made by "
                                        "tools/convert_int8.py (half the size, 1.5x faster, 45.5 dB against bf16; needs an NVIDIA "
                                        "GPU of compute capability 7.5 or newer). prompt.safetensors and flashdecoder.safetensors "
@@ -54,12 +74,38 @@ class ReCaVSRLoader(io.ComfyNode):
 
     @classmethod
     def execute(cls, transformer) -> io.NodeOutput:
-        path = folder_paths.get_full_path_or_raise(FOLDER, transformer)
+        path = folder_paths.get_full_path(FOLDER, transformer) if hasattr(folder_paths, "get_full_path") else None
+        if not path or not os.path.isfile(path):
+            folder_dirs = []
+            if hasattr(folder_paths, "get_folder_paths"):
+                folder_dirs.extend(folder_paths.get_folder_paths(FOLDER) or [])
+            folder_dirs.append(os.path.join(folder_paths.models_dir, FOLDER))
+            for d in folder_dirs:
+                cand = os.path.join(d, transformer)
+                if os.path.isfile(cand):
+                    path = cand
+                    break
+        if not path or not os.path.isfile(path):
+            path = folder_paths.get_full_path_or_raise(FOLDER, transformer)
+
         folder = os.path.dirname(path)
-        for name in ("prompt.safetensors", "flashdecoder.safetensors"):
-            if not os.path.isfile(os.path.join(folder, name)):
-                raise FileNotFoundError(f"{name} is missing next to {path}; download kopper/ReCaVSR into models/{FOLDER}")
-        return io.NodeOutput(loader.load(path, os.path.join(folder, "flashdecoder.safetensors"), os.path.join(folder, "prompt.safetensors")))
+        prompt_path = os.path.join(folder, "prompt.safetensors")
+        if not os.path.isfile(prompt_path):
+            alt_prompt = os.path.join(folder_paths.models_dir, FOLDER, "prompt.safetensors")
+            if os.path.isfile(alt_prompt):
+                prompt_path = alt_prompt
+            else:
+                raise FileNotFoundError(f"prompt.safetensors is missing next to {path}; download kopper/ReCaVSR into models/{FOLDER}")
+
+        decoder_path = os.path.join(folder, "flashdecoder.safetensors")
+        if not os.path.isfile(decoder_path):
+            alt_decoder = os.path.join(folder_paths.models_dir, FOLDER, "flashdecoder.safetensors")
+            if os.path.isfile(alt_decoder):
+                decoder_path = alt_decoder
+            else:
+                raise FileNotFoundError(f"flashdecoder.safetensors is missing next to {path}; download kopper/ReCaVSR into models/{FOLDER}")
+
+        return io.NodeOutput(loader.load(path, decoder_path, prompt_path))
 
 
 class ReCaVSRUpscale(io.ComfyNode):
